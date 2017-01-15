@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity:Entity xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cdata="http://www.chinacreator.com/platform/mvc/cdata" xmlns:docket="http://www.chinacreator.com/platform/mvc/docket" xmlns:entity="http://www.chinacreator.com/platform/mvc/entity" sn="uploadfile">
+  <docket:name>上传的文件</docket:name>
+  <docket:createType>来自数据库</docket:createType>
+  <docket:primaryKey>
+    <docket:pkAttribute attribute="file_id" docketId="entity:com.chinacreator.c2.qyb.fs.entity.UploadFile" type="UUID"/>
+  </docket:primaryKey>
+  <docket:attributes>
+    <docket:attribute code="file_id" length="50" name="" nullable="false" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_path" length="200" name="" nullable="false" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_name" length="200" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_size" length="30" name="" nullable="true" type="long" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_type" length="50" name="" nullable="true" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="business_type" length="20" name="" nullable="true" type="string20" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="business_key" length="50" name="" nullable="true" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="business_key1" length="50" name="" nullable="true" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="store_type" length="1" name="" nullable="true" type="boolean" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_src_path" length="200" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_src_name" length="200" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="upload_time" length="0" name="" nullable="false" type="timestamp" default="CURRENT_TIMESTAMP">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="org_id" length="50" name="" nullable="true" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="user_id" length="50" name="" nullable="true" type="string64" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="file_describe" length="200" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="remark1" length="10" name="" nullable="true" type="string10" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="remark2" length="10" name="" nullable="true" type="string10" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="display_name" length="200" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="business_key2" length="255" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+    <docket:attribute code="business_key3" length="255" name="" nullable="true" type="string256" default="">
+      <docket:valueRange xsi:type="cdata:AllValueRange"/>
+    </docket:attribute>
+  </docket:attributes>
+  <docket:subDokcets/>
+  <docket:events/>
+  <docket:table ds="xzzx" table="KCOMP_FILE_UPLOAD"/>
+  <entity:datas/>
+  <entity:views/>
+</entity:Entity>

@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form:Form xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dync="http://www.chinacreator.com/platform/mvc/ui/dync" xmlns:form="http://www.chinacreator.com/platform/mvc/form" name="附件列表" sn="qybdir_uploadfilelist" type="form">
+  <form:control type="page/normal">
+    <form:attributes source="page/normal">
+      <dync:attribute default="" group="HTML" id="showHead" name="显示标题" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="HTML" id="title" name="标题" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="HTML" id="desc" name="描述" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="fixedHeight" name="自动高度" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="compact" name="紧凑页面" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="dirtyCheck" name="脏检查" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="beforeDataSourceLoad" name="数据源加载前" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="afterDataSourceLoad" name="数据源加载后" value="page_afterDataSourceLoad()">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="onload" name="页面加载完成" value="page_onload()">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+    </form:attributes>
+  </form:control>
+  <form:child xsi:type="form:Group" id="newGroup1" name="简单容器(DIV)">
+    <form:control type="container/div">
+      <form:attributes source="container/div">
+        <dync:attribute default="" group="高级自定义" id="style" name="自定义style" value="padding:0px; margin:0px;">
+          <dync:render/>
+          <dync:children/>
+        </dync:attribute>
+      </form:attributes>
+    </form:control>
+    <form:child xsi:type="form:Group" id="fileuploaddiv" name="简单容器(DIV)">
+      <form:control type="container/div">
+        <form:attributes source="container/div">
+          <dync:attribute default="12" group="HTML配置" id="span" name="占位数" value="10">
+            <dync:render/>
+            <dync:children/>
+          </dync:attribute>
+        </form:attributes>
+      </form:control>
+      <form:child xsi:type="form:Field" binding="" id="newFiled1" name="附件上传">
+        <form:control type="widget/multiple_file_input_iframe">
+          <form:attributes source="widget/multiple_file_input_iframe">
+            <dync:attribute default="" group="事件" id="onSuccess" name="上传成功" value="newFiled_onSuccess(data)">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="dbdir" group="HTML属性" id="process" name="上传处理器" value="qybdirprocess">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="6" group="布局属性" id="span" name="占位数" value="10">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="" group="事件" id="onError" name="上传失败" value="newFiled_onError(data)">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+          </form:attributes>
+        </form:control>
+      </form:child>
+    </form:child>
+    <form:child xsi:type="form:Group" id="fileuploadbuttondiv" name="简单容器(DIV)">
+      <form:control type="container/div">
+        <form:attributes source="container/div">
+          <dync:attribute default="12" group="HTML配置" id="span" name="占位数" value="2">
+            <dync:render/>
+            <dync:children/>
+          </dync:attribute>
+        </form:attributes>
+      </form:control>
+      <form:child xsi:type="form:Field" id="newField3" name="上传" customize="true">
+        <form:control type="widget/button">
+          <form:attributes source="widget/button">
+            <dync:attribute default="btn-sm" group="HTML设置" id="size" name="尺寸" value="btn-xs">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="" group="事件设置" id="click" name="点击事件" value="newField2_click($event)">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+          </form:attributes>
+        </form:control>
+        <form:validation/>
+      </form:child>
+    </form:child>
+    <form:child xsi:type="form:Group" id="fileuploadlistdiv" name="简单容器(DIV)">
+      <form:control type="container/div">
+        <form:attributes source="container/div">
+          <dync:attribute default="" group="高级自定义" id="style" name="自定义style" value="padding:0px; margin:0px;">
+            <dync:render/>
+            <dync:children/>
+          </dync:attribute>
+        </form:attributes>
+      </form:control>
+      <form:child xsi:type="form:Group" binding="$model.list1" id="list1" name="列表型数据源">
+        <form:control type="container/table_jqgrid">
+          <form:attributes source="container/table_jqgrid">
+            <dync:attribute default="true" group="表格设置" id="pagerView" name="分页栏" value="false">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="" group="表格设置" id="paramData" name="初始化参数" value="{businessType:$params.businessType,businessKey:$params.businessKey,businessKey1:$params.businessKey1,businessKey2:$params.businessKey2,businessKey3:$params.businessKey3}">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="true" group="工具栏" id="topToolbar" name="顶部工具栏" value="false">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+            <dync:attribute default="true" group="表格设置" id="multiselect" name="多选" value="false">
+              <dync:render/>
+              <dync:children/>
+            </dync:attribute>
+          </form:attributes>
+        </form:control>
+        <form:child xsi:type="form:Group" id="toolbar_table2" name="toolbar_table">
+          <form:control type="container/toolbar_table">
+            <form:attributes source="container/toolbar_table"/>
+          </form:control>
+          <form:child xsi:type="form:Field" id="buttonDel2" name="删除">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="delete">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-trash-o">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="red">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+          <form:child xsi:type="form:Field" id="buttonAdd2" name="新增">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="add">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-plus">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="purple">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+          <form:child xsi:type="form:Field" id="buttonEdit2" name="编辑">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="edit">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-pencil">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="blue">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+          <form:child xsi:type="form:Field" id="buttonView2" name="查看">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="get">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-bars">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="grey">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+          <form:child xsi:type="form:Field" id="buttonSearch2" name="查找">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="search">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-search">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="orange">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+          <form:child xsi:type="form:Field" id="buttonRefresh2" name="刷新">
+            <form:control type="widget/button_a_table">
+              <form:attributes source="widget/button_a_table">
+                <dync:attribute id="clickType" value="refrash">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="icon" value="fa-refresh">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+                <dync:attribute id="iconColor" value="green">
+                  <dync:render/>
+                  <dync:children/>
+                </dync:attribute>
+              </form:attributes>
+            </form:control>
+          </form:child>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="fileId" id="fileId2" name="fileId">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+              <dync:attribute default="false" group="表格设置" id="key" name="主键列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="filePath" id="filePath2" name="filePath">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="fileName" id="fileName2" name="fileName">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="fileSize" id="fileSize2" name="fileSize">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="fileType" id="fileType2" name="fileType">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="businessType" id="businessType2" name="businessType">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="businessKey" id="businessKey2" name="businessKey">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="表格设置" id="hidden" name="隐藏列" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+        </form:child>
+        <form:child xsi:type="form:Field" binding="displayName" id="newField4" name="附件列表" customize="true">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="基本设置" id="title" name="鼠标悬浮显示" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+              <dync:attribute default="" group="格式设置" id="customFormatter" name="自定义格式" value="newField4_customFormatter(cellvalue,options,rowObject)">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+          <form:validation/>
+        </form:child>
+        <form:child xsi:type="form:Field" id="newField5" name="操作" customize="true">
+          <form:control type="widget/col_jqgrid">
+            <form:attributes source="widget/col_jqgrid">
+              <dync:attribute default="false" group="基本设置" id="fixed" name="宽度固定" value="true">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+              <dync:attribute default="" group="基本设置" id="width" name="宽度" value="80px">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+              <dync:attribute default="" group="格式设置" id="customFormatter" name="自定义格式" value="newField_customFormatter(cellvalue,options,rowObject)">
+                <dync:render/>
+                <dync:children/>
+              </dync:attribute>
+            </form:attributes>
+          </form:control>
+          <form:validation/>
+        </form:child>
+      </form:child>
+    </form:child>
+  </form:child>
+  <form:datasources>
+    <form:datasource xsi:type="form:Inputs">
+      <form:input desc="" id="businessType" name=""/>
+    </form:datasource>
+    <form:datasource xsi:type="form:PagingDataSource" id="list1" name="列表型数据源" logic="com.chinacreator.c2.qyb.fs.service.UploadFileContentProvider" pageSize="10" type="custom"/>
+  </form:datasources>
+  <form:scripts>
+//根据需要的页面类型禁用一些控件
+page_onload:function(){
+	//查看视图，附件上传组件、删除按钮隐藏
+	var type = $params.viewtype;
+	if(type == 'view'){
+		$view.fileuploaddiv.hide();
+		$view.fileuploadbuttondiv.hide();		
+		//var deletebutton = document.getElementById(&quot;delete&quot;);
+		//deletebutton.setAttribute(&quot;style&quot;,&quot;display:none&quot;)
+	}
+	//查看上传视图 type = view_upload
+	else if(type == &quot;view_upload&quot;){	
+		var deletebutton = document.getElementById(&quot;delete&quot;);
+		deletebutton.setAttribute(&quot;style&quot;,&quot;display:none&quot;)		
+	}
+	//编辑视图 所有可见
+	else if(type == &quot;view_edit&quot;){
+		
+	}
+	//默认查看
+	else{
+		$view.fileuploaddiv.hide();
+		$view.fileuploadbuttondiv.hide();		
+		var deletebutton = document.getElementById(&quot;delete&quot;);
+		deletebutton.setAttribute(&quot;style&quot;,&quot;display:none&quot;)
+	}
+	
+},
+
+page_afterDataSourceLoad:function(){
+
+},
+//附件上传
+newField2_click:function($event){
+	$view.newFiled1.submit(
+	{
+		businessType:$params.businessType,
+		businessKey:$params.businessKey,
+		businessKey1:$params.businessKey1,
+		businessKey2:$params.businessKey2,
+		businessKey3:$params.businessKey3,
+	});
+},
+//上传成功回调
+newFiled_onSuccess:function(data){
+	$view.list1.refresh();
+	Messenger.post({
+	    'message': &quot;文件上传成功&quot;,
+	    'type': 'success',
+	});
+},
+
+newFiled_onError:function(data){
+		Messenger.post({
+	    'message': &quot;文件上传失败&quot;,
+	    'type': 'error',
+	});
+},
+//操作栏 自定义格式 注意return 后面不能分行 否则会出错
+newField_customFormatter:function(cellvalue,options,rowObject){
+	var type = $params.viewtype;
+	if(type == &quot;view_edit&quot;){
+		return &quot;&lt;div> &lt;a id='download' title='下载' ng-click=functions.download('&quot;+encodeURI(rowObject.filePath)+&quot;',0)> &lt;i class='fa fa-cloud-download'/> &lt;/a> &quot;
+			+&quot; &lt;a id = 'view' title='查看' href='javascript:void(0)' &quot;
+			+&quot;ng-click=functions.viewfile('&quot;+encodeURI(rowObject.filePath)+&quot;',0)> &lt;i class='fa fa-eye'>&lt;/i> &lt;/a>&quot;
+			+&quot; &lt;a id = 'delete' title='删除' href='javascript:void(0)' &quot;
+			+&quot;ng-click=functions.deletefile('&quot;+encodeURI(rowObject.filePath)+&quot;',0)> &lt;i class='fa fa-trash-o'>&lt;/i> &lt;/a>&quot;			
+			+&quot; &lt;/div>&quot;
+	}else{
+		return &quot;&lt;div> &lt;a id='download' title='下载' ng-click=functions.download('&quot;+encodeURI(rowObject.filePath)+&quot;',0)> &lt;i class='fa fa-cloud-download'/> &lt;/a> &quot;
+			+&quot; &lt;a id = 'view' title='查看' href='javascript:void(0)' &quot;
+			+&quot;ng-click=functions.viewfile('&quot;+encodeURI(rowObject.filePath)+&quot;',0)> &lt;i class='fa fa-eye'>&lt;/i> &lt;/a>&quot;
+			+&quot;&lt;/div>&quot;
+	}
+},
+//处理文件下载
+download:function(a){
+	var d = decodeURI(a)
+	var paths = d.split(&quot;/&quot;)
+	var name = paths[2]
+	var newname = encodeURIComponent(name)
+	var newa = paths[0]+&quot;/&quot;+paths[1]+&quot;/&quot;+newname
+	//encodeURIComponent
+	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa})
+		.success(function(data,response, status, headers, config){
+			if(1==data.status){
+				 var downloadIframe=document.getElementById(&quot;downloadIframe&quot;);
+				 if(!downloadIframe){
+					 downloadIframe=document.createElement(&quot;iframe&quot;);
+					 downloadIframe.id=&quot;downloadIframe&quot;;
+					 downloadIframe.name=&quot;downloadIframe&quot;;
+					 downloadIframe.style.display=&quot;none&quot;;
+					 document.body.appendChild(downloadIframe);
+				 }
+				 downloadIframe.src=&quot;iframefile/qybdirprocess/download/&quot;+newa;
+			}else{
+				alert(&quot;文件不存在&quot;);
+			}
+		});
+},
+//处理文件删除
+deletefile:function(a){
+	var d = decodeURI(a)
+	var paths = d.split(&quot;/&quot;)
+	var name = paths[2]
+	var newname = encodeURIComponent(name)
+	var newa = paths[0]+&quot;/&quot;+paths[1]+&quot;/&quot;+newname
+	$http({method : &quot;DELETE&quot;,url : &quot;iframefile/qybdirprocess/&quot;+newa})
+	.success(function(data,response, status, headers, config){
+		if(1==data.status){
+			$view.list1.refresh();
+			Messenger.post({
+			    'message': &quot;删除成功&quot;,
+			    'type': 'success',
+			});
+		}else{
+			$view.list1.refresh();
+			Messenger.post({
+			    'message': &quot;删除失败了&quot;,
+			    'type': 'error',
+			});
+		}
+   });
+},
+
+viewfile:function(path){
+	var url = 'filepath='+path;
+	var newurl = encodeURI(url);
+	window.open('showuploadfile.jsp?'+newurl);
+},
+
+newField4_customFormatter:function(cellvalue,options,rowObject){
+	return '&lt;a style=&quot;color:blue&quot; href=&quot;javascript:void(0)&quot; ng-click=&quot;functions.download(\''+encodeURI(rowObject.filePath)+'\')&quot;>'+cellvalue+'&lt;/a>';
+}</form:scripts>
+  <form:htmls>&lt;style type=&quot;text/css&quot;>&#xD;
+	#fileuploadlistdiv th {&#xD;
+		display: none;&#xD;
+	}&#xD;
+&lt;/style></form:htmls>
+</form:Form>

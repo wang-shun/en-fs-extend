@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomRule xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns="http://www.chinacreator.com/platform/mvc/rule" sn="getuploadfiles" log="false" className="com.chinacreator.c2.qyb.fs.service.UploadFileService" method="getFiles">
+  <instanceCreator>
+    <params/>
+  </instanceCreator>
+  <name>获取附件</name>
+  <desc>获取指定id 和 key 的记录条数</desc>
+  <inputs>
+    <input collection="false" desc="请必填" id="businessType" required="true" type="String"/>
+    <input collection="false" desc="请必填" id="businessKey" required="true" type="String"/>
+    <input collection="false" desc="请必填" id="businessKey1" required="false" type="String"/>
+    <input collection="false" desc="请必填" id="businessKey2" required="false" type="String"/>
+    <input collection="false" desc="请必填" id="businessKey3" required="true" type="String"/>
+  </inputs>
+  <outputs>
+    <output autoValue="Result" desc="" id="result" name="方法返回值" type="java.util.List"/>
+  </outputs>
+  <params>
+    <param autoValue="Input.businessType" name="businessType" signature="QString;" type="String"/>
+    <param autoValue="Input.businessKey" name="businessKey" signature="QString;" type="String"/>
+    <param autoValue="Input.businessKey1" name="businessKey1" signature="QString;" type="String"/>
+    <param autoValue="Input.businessKey2" name="businessKey2" signature="QString;" type="String"/>
+    <param autoValue="Input.businessKey3" name="businessKey3" signature="QString;" type="String"/>
+  </params>
+  <return signature="QList&lt;QUploadFile;>;" type="java.util.List"/>
+</CustomRule>

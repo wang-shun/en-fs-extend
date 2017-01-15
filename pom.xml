@@ -1,0 +1,137 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+<!-- 	<parent>
+    		<groupId>com.chinacreator.c2.jp</groupId>
+    		<artifactId>c2-xz-console-parent</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+ 	</parent> -->
+ 	<groupId>com.chinacreator.c2.qyb</groupId>
+	<artifactId>c2-qyb-fs</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<dependencies>	
+	
+<!-- 		<dependency>
+		    <groupId>com.chinacreator.c2.qyb</groupId>
+		    <version>${c2.qyb.workflow.version}</version>
+			<artifactId>qysyb-workflow-mysql</artifactId>
+			<scope>provided</scope>		
+		</dependency> -->	
+		
+		<dependency>
+		  <groupId>com.chinacreator.c2</groupId>
+		  <artifactId>c2-runtime</artifactId>
+		  <version>4.2.4</version>
+		  <scope>provided</scope>		
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.chinacreator.c2</groupId>
+		  <artifactId>c2-ui-components</artifactId>
+		  <version>4.2.8.6</version>
+		  <scope>provided</scope>		
+		</dependency>
+				
+		<dependency>
+		     <groupId>com.chinacreator.c2</groupId>
+		     <artifactId>c2-module-fs</artifactId>
+		     <version>1.1.9</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.chinacreator.c2.xz</groupId>
+			<version>${project.version}</version>
+			<artifactId>c2-jp-common</artifactId>		
+			<scope>provided</scope>
+		</dependency>		
+		
+<!-- 		<dependency>
+			<groupId>com.chinacreator.c2.qyb</groupId>
+			<version>${c2.qyb.workflow.manage.version}</version>
+			<artifactId>qysyb-workflow-manage</artifactId>		
+			<scope>provided</scope>
+		</dependency>
+			
+		<dependency>
+			<groupId>com.chinacreator.c2</groupId>
+			<artifactId>c2-flow-resources</artifactId>
+			<version>${c2.flow.resources.version}</version>
+			<type>war</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.chinacreator.c2</groupId>
+			<artifactId>c2-flow-ui</artifactId>
+			<version>${c2.flow.ui.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.chinacreator.c2</groupId>
+			<artifactId>c2-flow-api</artifactId>
+			<version>${c2.flow.api.version}</version>
+			<scope>provided</scope>
+		</dependency> -->
+	
+<!-- 		<dependency>
+			<groupId>com.chinacreator.c2.qyb</groupId>
+			<artifactId>c2-qyb-calendar-mysql</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>	 -->
+	
+		<dependency>
+		  <groupId>com.chinacreator.c2</groupId>
+		  <artifactId>c2-sys-std-mysql</artifactId>
+		  <version>4.2.3</version>
+		 <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.chinacreator.c2</groupId>
+			<artifactId>c2-sys-sysmgr-dataUtil</artifactId>
+			<version>4.2.3</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		     <groupId>com.chinacreator.c2</groupId>
+		     <artifactId>c2-module-fs-dir</artifactId>
+		     <version>1.1.9</version>
+		     <scope>provided</scope>
+		</dependency>
+		
+<!-- 		<dependency>
+   			<groupId>com.chinacreator.c2.jp</groupId>
+			<artifactId>c2-jp-config-manage</artifactId>
+    		<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency> -->	
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.chinacreator.c2</groupId>
+			<artifactId>c2-sys-ui-components</artifactId>
+			<version>1.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+  <distributionManagement>
+		<repository>
+			<id>business-releases</id>
+			<name>business</name>
+			<url>http://172.16.25.142/nexus/content/repositories/business-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>business-snapshots</id>
+			<name>business</name>
+			<url>http://172.16.25.142/nexus/content/repositories/business-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>	
+</project>

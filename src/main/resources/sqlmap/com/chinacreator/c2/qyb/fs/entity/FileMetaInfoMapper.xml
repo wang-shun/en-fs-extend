@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="com.chinacreator.c2.qyb.fs.entity.FileMetaInfoMapper">	
+
+<!-- ElementID:column_sql,Generated=true -->
+<sql id="column_sql">
+		  kcomp_file_upload.file_id ,
+		  kcomp_file_upload.file_path ,
+		  kcomp_file_upload.file_name ,
+		  kcomp_file_upload.file_size ,
+		  kcomp_file_upload.file_type ,
+		  kcomp_file_upload.business_type ,
+		  kcomp_file_upload.business_key ,
+		  kcomp_file_upload.business_key1 ,
+		  kcomp_file_upload.store_type ,
+		  kcomp_file_upload.file_src_path ,
+		  kcomp_file_upload.file_src_name ,
+		  kcomp_file_upload.upload_time ,
+		  kcomp_file_upload.org_id ,
+		  kcomp_file_upload.user_id ,
+		  kcomp_file_upload.file_describe ,
+		  kcomp_file_upload.remark1 ,
+		  kcomp_file_upload.remark2 ,
+		  kcomp_file_upload.display_name ,
+		  kcomp_file_upload.business_key2 
+</sql>
+
+<!-- ElementID:whereClause_sql,Generated=true -->
+<sql id="whereClause_sql">
+	    <if test="fileId != null">and kcomp_file_upload.file_id = #{fileId}</if>
+	    <if test="filePath != null">and kcomp_file_upload.file_path = #{filePath}</if>
+	    <if test="fileName != null">and kcomp_file_upload.file_name = #{fileName}</if>
+	    <if test="fileSize != null">and kcomp_file_upload.file_size = #{fileSize}</if>
+	    <if test="fileType != null">and kcomp_file_upload.file_type = #{fileType}</if>
+	    <if test="businessType != null">and kcomp_file_upload.business_type = #{businessType}</if>
+	    <if test="businessKey != null">and kcomp_file_upload.business_key = #{businessKey}</if>
+	    <if test="businessKey1 != null">and kcomp_file_upload.business_key1 = #{businessKey1}</if>
+	    <if test="storeType != null">and kcomp_file_upload.store_type = #{storeType}</if>
+	    <if test="fileSrcPath != null">and kcomp_file_upload.file_src_path = #{fileSrcPath}</if>
+	    <if test="fileSrcName != null">and kcomp_file_upload.file_src_name = #{fileSrcName}</if>
+	    <if test="uploadTime != null">and kcomp_file_upload.upload_time = #{uploadTime}</if>
+	    <if test="orgId != null">and kcomp_file_upload.org_id = #{orgId}</if>
+	    <if test="userId != null">and kcomp_file_upload.user_id = #{userId}</if>
+	    <if test="fileDescribe != null">and kcomp_file_upload.file_describe = #{fileDescribe}</if>
+	    <if test="remark1 != null">and kcomp_file_upload.remark1 = #{remark1}</if>
+	    <if test="remark2 != null">and kcomp_file_upload.remark2 = #{remark2}</if>
+	    <if test="displayName != null">and kcomp_file_upload.display_name = #{displayName}</if>
+	    <if test="businessKey2 != null">and kcomp_file_upload.business_key2 = #{businessKey2}</if>
+</sql>
+
+
+<!-- ElementID:FileMetaInfoResult,Generated=true -->
+<resultMap id="FileMetaInfoResult" type="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo">
+	<id property="fileId" column="file_id"/>
+	<result property="filePath" column="file_path"/>
+	<result property="fileName" column="file_name"/>
+	<result property="fileSize" column="file_size"/>
+	<result property="fileType" column="file_type"/>
+	<result property="businessType" column="business_type"/>
+	<result property="businessKey" column="business_key"/>
+	<result property="businessKey1" column="business_key1"/>
+	<result property="storeType" column="store_type"/>
+	<result property="fileSrcPath" column="file_src_path"/>
+	<result property="fileSrcName" column="file_src_name"/>
+	<result property="uploadTime" column="upload_time"/>
+	<result property="orgId" column="org_id"/>
+	<result property="userId" column="user_id"/>
+	<result property="fileDescribe" column="file_describe"/>
+	<result property="remark1" column="remark1"/>
+	<result property="remark2" column="remark2"/>
+	<result property="displayName" column="display_name"/>
+	<result property="businessKey2" column="business_key2"/>
+</resultMap>
+
+
+<!-- ElementName:cache,Generated=true -->
+<cache type="C2_Default_Dao_Cache"/>
+
+<!-- ElementID:insert,Generated=true -->
+<insert id="insert" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo">
+	insert into kcomp_file_upload(
+	         <if test="fileId != null">file_id</if>
+	         <if test="filePath != null">,file_path</if>
+	         <if test="fileName != null">,file_name</if>
+	         <if test="fileSize != null">,file_size</if>
+	         <if test="fileType != null">,file_type</if>
+	         <if test="businessType != null">,business_type</if>
+	         <if test="businessKey != null">,business_key</if>
+	         <if test="businessKey1 != null">,business_key1</if>
+	         <if test="storeType != null">,store_type</if>
+	         <if test="fileSrcPath != null">,file_src_path</if>
+	         <if test="fileSrcName != null">,file_src_name</if>
+	         <if test="uploadTime != null">,upload_time</if>
+	         <if test="orgId != null">,org_id</if>
+	         <if test="userId != null">,user_id</if>
+	         <if test="fileDescribe != null">,file_describe</if>
+	         <if test="remark1 != null">,remark1</if>
+	         <if test="remark2 != null">,remark2</if>
+	         <if test="displayName != null">,display_name</if>
+	         <if test="businessKey2 != null">,business_key2</if>
+	 	 	 )
+	 values (
+	         <if test="fileId != null">#{fileId,jdbcType=VARCHAR}</if>
+	         <if test="filePath != null">,#{filePath,jdbcType=VARCHAR}</if>
+	         <if test="fileName != null">,#{fileName,jdbcType=VARCHAR}</if>
+	         <if test="fileSize != null">,#{fileSize,jdbcType=NUMERIC}</if>
+	         <if test="fileType != null">,#{fileType,jdbcType=VARCHAR}</if>
+	         <if test="businessType != null">,#{businessType,jdbcType=VARCHAR}</if>
+	         <if test="businessKey != null">,#{businessKey,jdbcType=VARCHAR}</if>
+	         <if test="businessKey1 != null">,#{businessKey1,jdbcType=VARCHAR}</if>
+	         <if test="storeType != null">,#{storeType,jdbcType=CHAR}</if>
+	         <if test="fileSrcPath != null">,#{fileSrcPath,jdbcType=VARCHAR}</if>
+	         <if test="fileSrcName != null">,#{fileSrcName,jdbcType=VARCHAR}</if>
+	         <if test="uploadTime != null">,#{uploadTime,jdbcType=TIMESTAMP}</if>
+	         <if test="orgId != null">,#{orgId,jdbcType=VARCHAR}</if>
+	         <if test="userId != null">,#{userId,jdbcType=VARCHAR}</if>
+	         <if test="fileDescribe != null">,#{fileDescribe,jdbcType=VARCHAR}</if>
+	         <if test="remark1 != null">,#{remark1,jdbcType=VARCHAR}</if>
+	         <if test="remark2 != null">,#{remark2,jdbcType=VARCHAR}</if>
+	         <if test="displayName != null">,#{displayName,jdbcType=VARCHAR}</if>
+	         <if test="businessKey2 != null">,#{businessKey2,jdbcType=VARCHAR}</if>
+	 	 	 )
+</insert>
+
+<!-- ElementID:count,Generated=true -->
+<select id="count" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo" resultType="int">
+	select count(*) from kcomp_file_upload 
+		 <where>
+			<include refid="whereClause_sql"/>
+		</where>
+</select>
+
+<!-- ElementID:update,Generated=true -->
+<update id="update" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo">
+	update kcomp_file_upload
+<set>
+	<if test="filePath != null">file_path=#{filePath,jdbcType=VARCHAR},</if>
+	<if test="fileName != null">file_name=#{fileName,jdbcType=VARCHAR},</if>
+	<if test="fileSize != null">file_size=#{fileSize,jdbcType=NUMERIC},</if>
+	<if test="fileType != null">file_type=#{fileType,jdbcType=VARCHAR},</if>
+	<if test="businessType != null">business_type=#{businessType,jdbcType=VARCHAR},</if>
+	<if test="businessKey != null">business_key=#{businessKey,jdbcType=VARCHAR},</if>
+	<if test="businessKey1 != null">business_key1=#{businessKey1,jdbcType=VARCHAR},</if>
+	<if test="storeType != null">store_type=#{storeType,jdbcType=CHAR},</if>
+	<if test="fileSrcPath != null">file_src_path=#{fileSrcPath,jdbcType=VARCHAR},</if>
+	<if test="fileSrcName != null">file_src_name=#{fileSrcName,jdbcType=VARCHAR},</if>
+	<if test="uploadTime != null">upload_time=#{uploadTime,jdbcType=TIMESTAMP},</if>
+	<if test="orgId != null">org_id=#{orgId,jdbcType=VARCHAR},</if>
+	<if test="userId != null">user_id=#{userId,jdbcType=VARCHAR},</if>
+	<if test="fileDescribe != null">file_describe=#{fileDescribe,jdbcType=VARCHAR},</if>
+	<if test="remark1 != null">remark1=#{remark1,jdbcType=VARCHAR},</if>
+	<if test="remark2 != null">remark2=#{remark2,jdbcType=VARCHAR},</if>
+	<if test="displayName != null">display_name=#{displayName,jdbcType=VARCHAR},</if>
+	<if test="businessKey2 != null">business_key2=#{businessKey2,jdbcType=VARCHAR}</if>
+</set>
+<where>
+	<choose>
+        <when test="fileId != null">and file_id = #{fileId}</when>
+        <otherwise>and file_id = </otherwise>
+    </choose>
+</where>
+</update>
+
+<!-- ElementID:updateNull,Generated=true -->
+<update id="updateNull" parameterType="map">
+	update kcomp_file_upload
+	<set>
+		<trim suffixOverrides=",">
+		    <if test="filePath==null">file_path = null,</if>
+		    <if test="fileName==null">file_name = null,</if>
+		    <if test="fileSize==null">file_size = null,</if>
+		    <if test="fileType==null">file_type = null,</if>
+		    <if test="businessType==null">business_type = null,</if>
+		    <if test="businessKey==null">business_key = null,</if>
+		    <if test="businessKey1==null">business_key1 = null,</if>
+		    <if test="storeType==null">store_type = null,</if>
+		    <if test="fileSrcPath==null">file_src_path = null,</if>
+		    <if test="fileSrcName==null">file_src_name = null,</if>
+		    <if test="uploadTime==null">upload_time = null,</if>
+		    <if test="orgId==null">org_id = null,</if>
+		    <if test="userId==null">user_id = null,</if>
+		    <if test="fileDescribe==null">file_describe = null,</if>
+		    <if test="remark1==null">remark1 = null,</if>
+		    <if test="remark2==null">remark2 = null,</if>
+		    <if test="displayName==null">display_name = null,</if>
+		    <if test="businessKey2==null">business_key2 = null,</if>
+		</trim>
+	</set>
+	<where>
+		<choose>
+			<when test="fileId != null">and file_id = #{fileId}</when>
+			<otherwise>and file_id = </otherwise>
+		</choose>
+	</where>
+</update>
+
+<!-- ElementID:delete,Generated=true -->
+<delete id="delete" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo">
+    delete from kcomp_file_upload where 1=1 and file_id = #{fileId}
+</delete>
+
+<!-- ElementID:select,Generated=true -->
+<select id="select" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo" resultMap="FileMetaInfoResult">
+	select 
+		<include refid="column_sql"/>
+	    from kcomp_file_upload 
+		 <where>
+			<include refid="whereClause_sql"/>
+		</where>
+</select>
+
+
+<!-- ElementID:insertBatch,Generated=true -->
+<insert id="insertBatch" parameterType="list">
+	insert into kcomp_file_upload (file_id,file_path,file_name,file_size,file_type,business_type,business_key,business_key1,store_type,file_src_path,file_src_name,upload_time,org_id,user_id,file_describe,remark1,remark2,display_name,business_key2) 
+<foreach collection="list" item="entity" index="index" separator="union all">
+		select 
+		#{entity.fileId,jdbcType = VARCHAR},
+				#{entity.filePath,jdbcType = VARCHAR},
+				#{entity.fileName,jdbcType = VARCHAR},
+				#{entity.fileSize,jdbcType = NUMERIC},
+				#{entity.fileType,jdbcType = VARCHAR},
+				#{entity.businessType,jdbcType = VARCHAR},
+				#{entity.businessKey,jdbcType = VARCHAR},
+				#{entity.businessKey1,jdbcType = VARCHAR},
+				#{entity.storeType,jdbcType = CHAR},
+				#{entity.fileSrcPath,jdbcType = VARCHAR},
+				#{entity.fileSrcName,jdbcType = VARCHAR},
+				#{entity.uploadTime,jdbcType = TIMESTAMP},
+				#{entity.orgId,jdbcType = VARCHAR},
+				#{entity.userId,jdbcType = VARCHAR},
+				#{entity.fileDescribe,jdbcType = VARCHAR},
+				#{entity.remark1,jdbcType = VARCHAR},
+				#{entity.remark2,jdbcType = VARCHAR},
+				#{entity.displayName,jdbcType = VARCHAR},
+				#{entity.businessKey2,jdbcType = VARCHAR}
+		from dual
+</foreach>
+</insert>
+
+<!-- ElementID:deleteBatch,Generated=true -->
+<delete id="deleteBatch" parameterType="List">
+	delete from kcomp_file_upload where file_id in
+<trim prefix="(" suffix=")" suffixOverrides=",">
+<foreach collection="list" item="entity" separator=",">
+	#{entity.fileId}
+</foreach>
+</trim>
+</delete>
+
+<!-- ElementID:selectAll,Generated=true -->
+<select id="selectAll" resultMap="FileMetaInfoResult">
+	select 
+		<include refid="column_sql"/>
+	    from kcomp_file_upload 
+</select>
+
+<!-- ElementID:selectByID,Generated=true -->
+<select id="selectByID" parameterType="java.lang.String" resultMap="FileMetaInfoResult">
+	select 
+		<include refid="column_sql"/>
+	    from kcomp_file_upload 
+		 where kcomp_file_upload.file_id = #{fileId,jdbcType=VARCHAR}
+</select>
+
+<!-- ElementID:selectByPage,Generated=true -->
+<select id="selectByPage" parameterType="com.chinacreator.c2.qyb.fs.entity.FileMetaInfo" resultMap="FileMetaInfoResult">
+	select 
+		<include refid="column_sql"/>
+	    from kcomp_file_upload 
+		 <where>
+			<include refid="whereClause_sql"/>
+		</where>
+</select>
+
+
+<!-- ElementID:selectMany,Generated=true -->
+<select id="selectMany" parameterType="list" resultMap="FileMetaInfoResult">
+select 
+	<include refid="column_sql"/> 
+	from kcomp_file_upload 
+	where kcomp_file_upload.file_id in (
+		select distinct file_id from kcomp_file_upload inner join
+<foreach collection="list" item="entity" separator="inner join">
+		(select 
+			distinct file_id
+			from kcomp_file_upload 
+			<where>
+	        <if test="entity.fileId != null">and kcomp_file_upload.file_id = #{entity.fileId}</if>
+	        <if test="entity.filePath != null">and kcomp_file_upload.file_path = #{entity.filePath}</if>
+	        <if test="entity.fileName != null">and kcomp_file_upload.file_name = #{entity.fileName}</if>
+	        <if test="entity.fileSize != null">and kcomp_file_upload.file_size = #{entity.fileSize}</if>
+	        <if test="entity.fileType != null">and kcomp_file_upload.file_type = #{entity.fileType}</if>
+	        <if test="entity.businessType != null">and kcomp_file_upload.business_type = #{entity.businessType}</if>
+	        <if test="entity.businessKey != null">and kcomp_file_upload.business_key = #{entity.businessKey}</if>
+	        <if test="entity.businessKey1 != null">and kcomp_file_upload.business_key1 = #{entity.businessKey1}</if>
+	        <if test="entity.storeType != null">and kcomp_file_upload.store_type = #{entity.storeType}</if>
+	        <if test="entity.fileSrcPath != null">and kcomp_file_upload.file_src_path = #{entity.fileSrcPath}</if>
+	        <if test="entity.fileSrcName != null">and kcomp_file_upload.file_src_name = #{entity.fileSrcName}</if>
+	        <if test="entity.uploadTime != null">and kcomp_file_upload.upload_time = #{entity.uploadTime}</if>
+	        <if test="entity.orgId != null">and kcomp_file_upload.org_id = #{entity.orgId}</if>
+	        <if test="entity.userId != null">and kcomp_file_upload.user_id = #{entity.userId}</if>
+	        <if test="entity.fileDescribe != null">and kcomp_file_upload.file_describe = #{entity.fileDescribe}</if>
+	        <if test="entity.remark1 != null">and kcomp_file_upload.remark1 = #{entity.remark1}</if>
+	        <if test="entity.remark2 != null">and kcomp_file_upload.remark2 = #{entity.remark2}</if>
+	        <if test="entity.displayName != null">and kcomp_file_upload.display_name = #{entity.displayName}</if>
+	        <if test="entity.businessKey2 != null">and kcomp_file_upload.business_key2 = #{entity.businessKey2}</if>
+			</where>
+		) ${entity.tableAlias} using (file_id)
+</foreach>
+)
+</select>
+</mapper>
