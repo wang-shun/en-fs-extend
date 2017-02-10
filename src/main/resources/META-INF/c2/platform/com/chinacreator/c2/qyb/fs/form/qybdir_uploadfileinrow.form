@@ -242,7 +242,7 @@ set_buttonlabel:function(){
 	$(&quot;#attchmentinrow span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);
 }</form:scripts>
   <form:htmls>&lt;script type=&quot;text/ng-template&quot; id=&quot;div3_html&quot;>
-	&lt;label class=&quot;control-label al-control-label  ng-binding&quot; ng-style=&quot;{width:$model.labelWidth}&quot; 
+	&lt;label class=&quot;control-label al-control-label  ng-binding&quot; ng-style=&quot;{width:$model.labelWidth,'text-align':'center'}&quot; 
 		ng-class=&quot;{'required-label':$model.fillnecessary}&quot; >{{$model.displayName}}&lt;/label>
 &lt;/script>
 &lt;script type=&quot;text/ng-template&quot; id=&quot;div5_html&quot;>
