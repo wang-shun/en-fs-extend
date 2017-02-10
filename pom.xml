@@ -39,12 +39,12 @@
 		     <version>1.1.9</version>
 		</dependency>
 		
-		<dependency>
+<!-- 		<dependency>
 			<groupId>com.chinacreator.c2.xz</groupId>
 			<version>${project.version}</version>
 			<artifactId>c2-jp-common</artifactId>		
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>	 -->	
 		
 <!-- 		<dependency>
 			<groupId>com.chinacreator.c2.qyb</groupId>

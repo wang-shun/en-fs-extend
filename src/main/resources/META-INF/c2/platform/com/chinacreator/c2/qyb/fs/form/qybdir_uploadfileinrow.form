@@ -181,7 +181,7 @@ fileInputIframeinrow_onSuccess:function(data){
 
 can_del:function(file){
 //	return true
-	return $scope.permissionData[$params.field.fieldNo].writePermission
+	return $model.writePermission
 },
 can_download:function(file){
 	return true
