@@ -113,7 +113,7 @@
               </dync:render>
               <dync:children/>
             </dync:attribute>
-            <dync:attribute default="true" group="HTML属性" id="show" name="可见" value="permissionData[$params.field.fieldNo].writePermission">
+            <dync:attribute default="true" group="HTML属性" id="show" name="可见" value="$model.writePermission">
               <dync:render colSpan="1" height="0" multi="false" name="checkboxAndExpr"/>
               <dync:children/>
             </dync:attribute>
@@ -146,6 +146,22 @@
   <form:scripts>
 
 page_onload:function(){
+	if($params.field){
+		$model.labelWidth = $params.field.labelWidth == undefined?110:$params.field.labelWidth
+		$model.displayName = $params.field.displayName == undefined?$params.field.fieldName:$params.field.displayName
+	}else{
+		$model.labelWidth = $params.labelWidth
+		$model.displayName = $params.displayName
+	}
+	if($scope.permissionData &amp;&amp; $params.field){
+		$model.fillnecessary = $scope.permissionData[$params.field.fieldNo].fillnecessary
+		$model.writePermission = $scope.permissionData[$params.field.fieldNo].writePermission
+	}else{
+		$model.fillnecessary = $params.fillnecessary
+		$model.writePermission = $params.writePermission	
+	}
+
+
 	$view.fileInputIframeinrow.setParams({
 		businessType:$params.businessType,
 		businessKey:$params.businessKey,
@@ -226,8 +242,8 @@ set_buttonlabel:function(){
 	$(&quot;#attchmentinrow span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);
 }</form:scripts>
   <form:htmls>&lt;script type=&quot;text/ng-template&quot; id=&quot;div3_html&quot;>
-	&lt;label class=&quot;control-label al-control-label  ng-binding&quot; ng-style=&quot;{width:$params.field.labelWidth == undefined?110:$params.field.labelWidth}&quot; 
-		ng-class=&quot;{'required-label':permissionData[$params.fieldNo].fillnecessary}&quot; >{{$params.field.displayName == undefined?$params.field.fieldName:$params.field.displayName}}&lt;/label>
+	&lt;label class=&quot;control-label al-control-label  ng-binding&quot; ng-style=&quot;{width:$model.labelWidth}&quot; 
+		ng-class=&quot;{'required-label':$model.fillnecessary}&quot; >{{$model.displayName}}&lt;/label>
 &lt;/script>
 &lt;script type=&quot;text/ng-template&quot; id=&quot;div5_html&quot;>
 	&lt;div ng-repeat=&quot;a in $model.uploadfiles.result&quot;>
