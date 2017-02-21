@@ -200,7 +200,7 @@ page_beforeDataSourceLoad:function($params){
 	&lt;div ng-if=&quot;$model.swith&quot; id=&quot;{{$model.instanceid}}&quot; class=&quot;form-group col-sm-12&quot; ng-class=&quot;{'has-error':mainForm.fileInputIframeinrow_text.$invalid}&quot;>
 		&lt;label for=&quot;fileInputIframeinrow&quot; ng-class=&quot;{'required-label':$model.fillnecessary,'control-label':true,'al-control-label':true}&quot; 
 			ng-style=&quot;{width:$model.labelWidth}&quot;>{{$model.displayName}}&lt;/label>
-	   	&lt;div ng-style=&quot;{'margin-left':$model.labelWidth}&quot;>
+	   	&lt;div ng-style=&quot;{'margin-left':$model.labelWidth+10}&quot;>
 			&lt;div ng-show=&quot;false&quot; c2-single-upload-file-iframe=&quot;&quot; id=&quot;fileInputIframeinrow&quot; name=&quot;fileInputIframeinrow&quot; 
 				process=&quot;qybdirprocess&quot; max-size=&quot;10485760&quot; ng-disabled=&quot;false&quot; 
 				on-success=&quot;functions.fileInputIframeinrow_onSuccess(data)&quot; 
