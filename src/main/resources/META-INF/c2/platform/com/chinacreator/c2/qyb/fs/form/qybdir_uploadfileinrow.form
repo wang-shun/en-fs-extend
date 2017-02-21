@@ -30,7 +30,7 @@
         <dync:render/>
         <dync:children/>
       </dync:attribute>
-      <dync:attribute default="" group="事件" id="beforeDataSourceLoad" name="数据源加载前" value="">
+      <dync:attribute default="" group="事件" id="beforeDataSourceLoad" name="数据源加载前" value="page_beforeDataSourceLoad($params)">
         <dync:render/>
         <dync:children/>
       </dync:attribute>
@@ -44,94 +44,19 @@
       </dync:attribute>
     </form:attributes>
   </form:control>
-  <form:child xsi:type="form:Group" id="attchmentinrow" name="简单容器(DIV)">
+  <form:child xsi:type="form:Group" id="qybdir_uploadfileinrowderective" name="简单容器(DIV)">
     <form:control type="container/div">
       <form:attributes source="container/div">
         <dync:attribute default="false" group="HTML配置" id="nopadding" name="无内边距" value="true">
           <dync:render colSpan="2" height="0" multi="false" name="checkbox"/>
           <dync:children/>
         </dync:attribute>
-        <dync:attribute default="" group="高级自定义" id="style" name="自定义style" value="border: 1px rgb(197, 197, 197) solid">
-          <dync:render colSpan="2" height="0" multi="false" name="text"/>
+        <dync:attribute default="" group="高级自定义" id="html" name="自定义HTML" value="qybdir_uploadfileinrowderective_html">
+          <dync:render colSpan="2" height="0" multi="false" name="html"/>
           <dync:children/>
         </dync:attribute>
       </form:attributes>
     </form:control>
-    <form:child xsi:type="form:Group" id="div3" name="简单容器(DIV)">
-      <form:control type="container/div">
-        <form:attributes source="container/div">
-          <dync:attribute default="false" group="HTML配置" id="pure" name="简单div" value="true">
-            <dync:render colSpan="2" height="0" multi="false" name="checkbox"/>
-            <dync:children/>
-          </dync:attribute>
-          <dync:attribute default="" group="高级自定义" id="style" name="自定义style" value="width:110px">
-            <dync:render colSpan="2" height="0" multi="false" name="text"/>
-            <dync:children/>
-          </dync:attribute>
-          <dync:attribute default="" group="高级自定义" id="html" name="自定义HTML" value="div3_html">
-            <dync:render colSpan="2" height="0" multi="false" name="html"/>
-            <dync:children/>
-          </dync:attribute>
-        </form:attributes>
-      </form:control>
-    </form:child>
-    <form:child xsi:type="form:Group" id="div4" name="简单容器(DIV)">
-      <form:control type="container/div">
-        <form:attributes source="container/div">
-          <dync:attribute default="false" group="HTML配置" id="nopadding" name="无内边距" value="true">
-            <dync:render colSpan="2" height="0" multi="false" name="checkbox"/>
-            <dync:children/>
-          </dync:attribute>
-          <dync:attribute default="12" group="HTML配置" id="span" name="占位数" value="10">
-            <dync:render colSpan="1" height="0" multi="false" name="text"/>
-            <dync:children/>
-          </dync:attribute>
-          <dync:attribute default="" group="高级自定义" id="style" name="自定义style" value="border-left: 1px rgb(197, 197, 197) solid;">
-            <dync:render colSpan="2" height="0" multi="false" name="text"/>
-            <dync:children/>
-          </dync:attribute>
-        </form:attributes>
-      </form:control>
-      <form:child xsi:type="form:Field" id="fileInputIframeinrow" name="" customize="true">
-        <form:control type="widget/file_input_iframe">
-          <form:attributes source="widget/file_input_iframe">
-            <dync:attribute default="75" group="布局属性" id="lableWidth" name="lable宽度" value="-12">
-              <dync:render colSpan="1" height="0" multi="false" name="text"/>
-              <dync:children/>
-            </dync:attribute>
-            <dync:attribute default="true" group="HTML属性" id="showRemoveButton" name="显示清除按钮" value="false">
-              <dync:render colSpan="2" height="0" multi="false" name="checkbox"/>
-              <dync:children/>
-            </dync:attribute>
-            <dync:attribute default="dbdir" group="HTML属性" id="process" name="上传处理器" value="qybdirprocess">
-              <dync:render colSpan="1" height="0" multi="false" name="text"/>
-              <dync:children/>
-            </dync:attribute>
-            <dync:attribute default="" group="事件" id="onSuccess" name="上传成功" value="fileInputIframeinrow_onSuccess(data)">
-              <dync:render colSpan="2" height="0" multi="false" name="event">
-                <dync:item name="params" value="data"/>
-              </dync:render>
-              <dync:children/>
-            </dync:attribute>
-            <dync:attribute default="true" group="HTML属性" id="show" name="可见" value="$model.writePermission">
-              <dync:render colSpan="1" height="0" multi="false" name="checkboxAndExpr"/>
-              <dync:children/>
-            </dync:attribute>
-          </form:attributes>
-        </form:control>
-        <form:validation/>
-      </form:child>
-      <form:child xsi:type="form:Group" id="div5" name="简单容器(DIV)">
-        <form:control type="container/div">
-          <form:attributes source="container/div">
-            <dync:attribute default="" group="高级自定义" id="html" name="自定义HTML" value="div5_html">
-              <dync:render colSpan="2" height="0" multi="false" name="html"/>
-              <dync:children/>
-            </dync:attribute>
-          </form:attributes>
-        </form:control>
-      </form:child>
-    </form:child>
   </form:child>
   <form:datasources>
     <form:datasource xsi:type="form:Inputs"/>
@@ -240,19 +165,57 @@ viewfile:function(file){
 set_buttonlabel:function(){
 	$(&quot;#attchmentinrow span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
 	$(&quot;#attchmentinrow span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);
-}</form:scripts>
-  <form:htmls>&lt;script type=&quot;text/ng-template&quot; id=&quot;div3_html&quot;>
-	&lt;label class=&quot;control-label al-control-label  ng-binding&quot; ng-style=&quot;{width:$model.labelWidth,'text-align':'center'}&quot; 
-		ng-class=&quot;{'required-label':$model.fillnecessary}&quot; >{{$model.displayName}}&lt;/label>
-&lt;/script>
-&lt;script type=&quot;text/ng-template&quot; id=&quot;div5_html&quot;>
-	&lt;div ng-repeat=&quot;a in $model.uploadfiles.result&quot;>
-		&lt;a style=&quot;color: black&quot; ng-click=&quot;functions.viewfile(a)&quot;>{{a.displayName}}&lt;/a>
-		&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_download(file)&quot; ng-click=&quot;functions.download(a.filePath)&quot;>下载&lt;/a>
-		&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_del(file)&quot; ng-click=&quot;functions.deletefile(a)&quot;>删除&lt;/a>
-	&lt;/div>
-&lt;/script>
-&lt;style>
+	
+	$(&quot;#qybdir_uploadfileinrowderective span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
+	$(&quot;#qybdir_uploadfileinrowderective span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);	
+},
 
-&lt;/style></form:htmls>
+fileInputIframeinrow_onError:function(data){
+	
+},
+uploadclicked:function($event){
+	var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
+	div.click()
+},
+page_beforeDataSourceLoad:function($params){
+	$model.swith = false
+	$model.allow = ($params.allow == undefined||$params.allow == &quot;&quot;)?'[]':$params.allow
+//	$model.allow = ($params.allow == undefined||$params.allow == &quot;&quot;)?'[]':'[&quot;txt&quot;,&quot;pdf&quot;]'
+	
+	$model.deny = '[]'
+	
+	var a = Math.random()*(10000000000000)
+	var ran = Math.floor(a)	
+	$model.instanceid = &quot;fileInputIframeinrow-&quot; 
+		+ new Date().getTime() + &quot;-&quot;
+		+ ran.toString()
+		
+	$model.swith = true
+	
+}</form:scripts>
+  <form:htmls>&lt;style>
+
+&lt;/style>
+&lt;script type=&quot;text/ng-template&quot; id=&quot;qybdir_uploadfileinrowderective_html&quot;>
+	&lt;div ng-if=&quot;$model.swith&quot; id=&quot;{{$model.instanceid}}&quot; class=&quot;form-group col-sm-12&quot; ng-class=&quot;{'has-error':mainForm.fileInputIframeinrow_text.$invalid}&quot;>
+		&lt;label for=&quot;fileInputIframeinrow&quot; ng-class=&quot;{'required-label':$model.fillnecessary,'control-label':true,'al-control-label':true}&quot; 
+			ng-style=&quot;{width:$model.labelWidth}&quot;>{{$model.displayName}}&lt;/label>
+	   	&lt;div ng-style=&quot;{'margin-left':$model.labelWidth}&quot;>
+			&lt;div ng-show=&quot;false&quot; c2-single-upload-file-iframe=&quot;&quot; id=&quot;fileInputIframeinrow&quot; name=&quot;fileInputIframeinrow&quot; 
+				process=&quot;qybdirprocess&quot; max-size=&quot;10485760&quot; ng-disabled=&quot;false&quot; 
+				on-success=&quot;functions.fileInputIframeinrow_onSuccess(data)&quot; 
+				on-error=&quot;functions.fileInputIframeinrow_onError(data)&quot; 
+				allow=&quot;{{$model.allow}}&quot; deny=&quot;{{$model.deny}}&quot;
+				auto-submit=&quot;&quot; class=&quot;ng-isolate-scope&quot; data-instanceid=&quot;{{$model.instanceid}}&quot;>
+			&lt;/div>	
+			&lt;a ng-show=&quot;$model.writePermission&quot; style=&quot;cursor: pointer;&quot; ng-click=&quot;functions.uploadclicked($event)&quot;>添加附件&lt;/a>
+			&lt;div ng-repeat=&quot;a in $model.uploadfiles.result&quot;>
+				&lt;a style=&quot;color: black&quot; ng-click=&quot;functions.viewfile(a)&quot;>{{a.displayName}}&lt;/a>
+				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_download(file)&quot; ng-click=&quot;functions.download(a.filePath)&quot;>下载&lt;/a>
+				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_del(file)&quot; ng-click=&quot;functions.deletefile(a)&quot;>删除&lt;/a>
+			&lt;/div>		
+	    &lt;/div>
+	&lt;/div>
+
+&lt;/script></form:htmls>
 </form:Form>
