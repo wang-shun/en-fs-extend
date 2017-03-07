@@ -98,10 +98,14 @@ page_onload:function(){
 },
 
 fileInputIframeinrow_onSuccess:function(data){
+	if($params.onSuccess){
+		$params.onSuccess(data)
+	}
 	functions.set_buttonlabel()
 	$model.uploadfiles.$load().then(function(data){
 		
 	})
+	$scope.$emit(&quot;fstatus&quot;,{status:'success',num:1,data:data})
 },
 
 can_del:function(file){
@@ -143,6 +147,9 @@ deletefile:function(a){
 	$http({method : &quot;DELETE&quot;,url : &quot;iframefile/qybdirprocess/&quot;+newa})
 	.success(function(data,response, status, headers, config){
 		if(1==data.status){
+			if($params.onDelete){
+				$params.onDelete(data)
+			}		
 			$model.uploadfiles.$reload()
 			Messenger.post({
 			    'message': &quot;删除成功&quot;,
@@ -171,7 +178,9 @@ set_buttonlabel:function(){
 },
 
 fileInputIframeinrow_onError:function(data){
-	
+	if($params.onError){
+		$params.onError(data)
+	}	
 },
 uploadclicked:function($event){
 	var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
@@ -200,7 +209,7 @@ page_beforeDataSourceLoad:function($params){
 	&lt;div ng-if=&quot;$model.swith&quot; id=&quot;{{$model.instanceid}}&quot; class=&quot;form-group col-sm-12&quot; ng-class=&quot;{'has-error':mainForm.fileInputIframeinrow_text.$invalid}&quot;>
 		&lt;label for=&quot;fileInputIframeinrow&quot; ng-class=&quot;{'required-label':$model.fillnecessary,'control-label':true,'al-control-label':true}&quot; 
 			ng-style=&quot;{width:$model.labelWidth}&quot;>{{$model.displayName}}&lt;/label>
-	   	&lt;div ng-style=&quot;{'margin-left':$model.labelWidth+10}&quot;>
+	   	&lt;div ng-style=&quot;{float:'left'}&quot;>
 			&lt;div ng-show=&quot;false&quot; c2-single-upload-file-iframe=&quot;&quot; id=&quot;fileInputIframeinrow&quot; name=&quot;fileInputIframeinrow&quot; 
 				process=&quot;qybdirprocess&quot; max-size=&quot;10485760&quot; ng-disabled=&quot;false&quot; 
 				on-success=&quot;functions.fileInputIframeinrow_onSuccess(data)&quot; 
