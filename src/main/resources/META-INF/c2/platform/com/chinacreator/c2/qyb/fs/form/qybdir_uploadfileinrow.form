@@ -34,7 +34,7 @@
         <dync:render/>
         <dync:children/>
       </dync:attribute>
-      <dync:attribute default="" group="事件" id="afterDataSourceLoad" name="数据源加载后" value="">
+      <dync:attribute default="" group="事件" id="afterDataSourceLoad" name="数据源加载后" value="page_afterDataSourceLoad()">
         <dync:render/>
         <dync:children/>
       </dync:attribute>
@@ -98,14 +98,15 @@ page_onload:function(){
 },
 
 fileInputIframeinrow_onSuccess:function(data){
-	if($params.onSuccess){
-		$params.onSuccess(data)
-	}
+
 	functions.set_buttonlabel()
-	$model.uploadfiles.$load().then(function(data){
-		
+	$model.uploadfiles.$load().then(function(data1){
+		if($params.onSuccess){
+			$params.onSuccess(data,$model.uploadfiles.result)
+		}		
+		$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})
 	})
-	$scope.$emit(&quot;fstatus&quot;,{status:'success',num:1,data:data})
+	
 },
 
 can_del:function(file){
@@ -147,14 +148,16 @@ deletefile:function(a){
 	$http({method : &quot;DELETE&quot;,url : &quot;iframefile/qybdirprocess/&quot;+newa})
 	.success(function(data,response, status, headers, config){
 		if(1==data.status){
-			if($params.onDelete){
-				$params.onDelete(data)
-			}		
-			$model.uploadfiles.$reload()
-			Messenger.post({
-			    'message': &quot;删除成功&quot;,
-			    'type': 'success',
-			});
+			$model.uploadfiles.$reload().then(function(data1){
+				if($params.onDelete){
+					$params.onDelete(data,$model.uploadfiles.result)
+				}	
+				$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})	
+				Messenger.post({
+				    'message': &quot;删除成功&quot;,
+				    'type': 'success',
+				});				
+			})
 		}else{
 			$model.uploadfiles.$reload()
 			Messenger.post({
@@ -179,7 +182,7 @@ set_buttonlabel:function(){
 
 fileInputIframeinrow_onError:function(data){
 	if($params.onError){
-		$params.onError(data)
+		$params.onError(data,$model.uploadfiles.result)
 	}	
 },
 uploadclicked:function($event){
@@ -201,6 +204,10 @@ page_beforeDataSourceLoad:function($params){
 		
 	$model.swith = true
 	
+},
+
+page_afterDataSourceLoad:function(){
+	$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
 }</form:scripts>
   <form:htmls>&lt;style>
 
