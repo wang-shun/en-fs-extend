@@ -104,7 +104,7 @@ fileInputIframeinrow_onSuccess:function(data){
 		if($params.onSuccess){
 			$params.onSuccess(data,$model.uploadfiles.result)
 		}		
-		$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})
+		$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})
 	})
 	
 },
@@ -152,7 +152,7 @@ deletefile:function(a){
 				if($params.onDelete){
 					$params.onDelete(data,$model.uploadfiles.result)
 				}	
-				$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})	
+				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})	
 				Messenger.post({
 				    'message': &quot;删除成功&quot;,
 				    'type': 'success',
@@ -207,7 +207,7 @@ page_beforeDataSourceLoad:function($params){
 },
 
 page_afterDataSourceLoad:function(){
-	$scope.$emit(&quot;fstatus&quot;,{num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
+	$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
 }</form:scripts>
   <form:htmls>&lt;style>
 
