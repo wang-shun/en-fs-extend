@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-
+import com.chinacreator.c2.dao.Dao;
+import com.chinacreator.c2.dao.DaoFactory;
 import com.chinacreator.c2.fs.DownResult;
 import com.chinacreator.c2.fs.FileInput;
 import com.chinacreator.c2.fs.FileMetadata;
@@ -50,22 +51,45 @@ public class CommonUploadFileProcess extends UploadProcess {
 	}
 
 	// 编程方式获取spring目录存储bean
-	private FileServer getDirFileServer() {
-		if (dirFileServer == null) {
-			dirFileServer = ApplicationContextManager.getContext().getBean(
-					"dirFileServer", FileServer.class);
+		private FileServer getDirFileServer(Map<String, Object> map) {
+			String[] myDir1 = (String[]) map.get("myDir");
+			if(myDir1 != null){
+				String myDir = myDir1[0];
+				if(myDir != null && !"undefined".equals(myDir)){
+					dirFileServer = ApplicationContextManager.getContext().getBean(
+							myDir, FileServer.class);
+				}else{
+					if (dirFileServer == null) {
+						   dirFileServer = ApplicationContextManager.getContext().getBean(
+								 "dirFileServer", FileServer.class);
+					}
+				
+				}
+			}else{
+				if (dirFileServer == null) {
+					   dirFileServer = ApplicationContextManager.getContext().getBean(
+							 "dirFileServer", FileServer.class);
+				}
+			}
+			return dirFileServer;	
 		}
-		return dirFileServer;
-	}
+	
+	// 编程方式获取spring目录存储bean
+//	private FileServer getDirFileServer1(String myDir) {
+//		dirFileServer = ApplicationContextManager.getContext().getBean(
+//				myDir, FileServer.class);
+//		return dirFileServer;
+//	}
+	
 
 	/**
 	 * 判断文件是否存在
 	 */
 	@Override
-	public boolean exist(String arg0, Map<String, Object> arg1)
+	public boolean exist(String arg0, Map<String, Object> map)
 			throws Exception {
 
-		FileServer server = this.getDirFileServer();
+		FileServer server = this.getDirFileServer(map);
 		return server.exsits(arg0);
 	}
 
@@ -73,9 +97,57 @@ public class CommonUploadFileProcess extends UploadProcess {
 	 * 处理文件删除
 	 */
 	// @Transactional
-	public boolean processDelete(String path, Map<String, Object> arg1)
+//	public boolean processDelete(String path, Map<String, Object> arg1)
+//			throws Exception {
+//		return this.getUploadFileServer().processDelete(path, arg1);
+//	}
+	
+	/**
+	 * 查看数据库中是否有此path记录文件
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public boolean existFileWithPath(String path) {
+		Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
+		UploadFile file = new UploadFile();
+		file.setFilePath(path);
+		List<UploadFile> files = dao.select(file);
+		if (files == null || files.size() == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * 文件处理器处理文件删除
+	 */
+//	@Transactional
+	public boolean processDelete(String path, Map<String, Object> map)
 			throws Exception {
-		return this.getUploadFileServer().processDelete(path, arg1);
+		try {
+			Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
+			FileServer server = this.getDirFileServer(map);
+			if (server.delete(path, true)) {
+				UploadFile uf = new UploadFile();
+				uf.setFilePath(path);
+				UploadFile con = dao.selectOne(uf);
+				int r = dao.delete(con);
+				if (r == 0) {
+					throw new RuntimeException(); // 回滚
+				}
+				return true;
+			} else if (existFileWithPath(path)) {
+				UploadFile uf = new UploadFile();
+				uf.setFilePath(path);
+
+			}
+
+		} catch (FileNotFoundException e) {
+			throw new FileNotExsitException(path);
+		}
+		return false;
 	}
 
 	/**
@@ -83,11 +155,11 @@ public class CommonUploadFileProcess extends UploadProcess {
 	 */
 	@Override
 	// @Transactional
-	public DownResult processDown(String fpath, Map<String, Object> arg1)
+	public DownResult processDown(String fpath, Map<String, Object> map)
 			throws Exception {
 		try {
+			FileServer server = this.getDirFileServer(map);
 			DownResult downResult = new DownResult();
-			FileServer server = this.getDirFileServer();
 			InputStream is = server.get(fpath);
 			FileMetadata fm = server.getMetaData(fpath);
 			downResult.setInputStream(is);
@@ -112,6 +184,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 		String[] businessKey1s = (String[]) map.get("businessKey1");
 		String[] businessKey2s = (String[]) map.get("businessKey2");
 		String[] businessKey3s = (String[]) map.get("businessKey3");
+		String[] myDir1 = (String[]) map.get("myDir");
 		String businessType = businessTypes[0];
 		String businessKey = businessKeys[0];
 		String businessKey1 = null;
@@ -130,7 +203,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 			return new FileUploadResult(HttpType.ERROR.ordinal(),
 					"businessType businessKey不能为空", null, null, null);
 		}
-
+		
 		String filename = null;
 		UploadFileService ufs = this.getUploadFileServer();
 
@@ -140,9 +213,8 @@ public class CommonUploadFileProcess extends UploadProcess {
 
 			if (fileList.size() <= 0)
 				throw new Exception("上传文件不能为空");
-
-			FileServer server = this.getDirFileServer();
-
+			FileServer server = this.getDirFileServer(map);
+			
 			// 为了兼容以前，单附件和多附件格式不能统一
 			if (fileList.size() > 1) {
 				MultiFileUploadResult mfr = new MultiFileUploadResult(

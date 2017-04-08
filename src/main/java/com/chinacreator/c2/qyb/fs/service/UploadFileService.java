@@ -161,44 +161,7 @@ public class UploadFileService {
 		return dao.selectByPage(file, pageable, null, true);
 	}
 
-	// 编程方式获取spring目录存储bean
-	private FileServer getDirFileServer() {
-		if (dirFileServer == null) {
-			dirFileServer = ApplicationContextManager.getContext().getBean(
-					"dirFileServer", FileServer.class);
-		}
-		return dirFileServer;
-	}
-
-	/**
-	 * 文件处理器处理文件删除
-	 */
-	@Transactional
-	public boolean processDelete(String path, Map<String, Object> arg1)
-			throws Exception {
-		try {
-			Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
-			FileServer server = this.getDirFileServer();
-			if (server.delete(path, true)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-				UploadFile con = dao.selectOne(uf);
-				int r = dao.delete(con);
-				if (r == 0) {
-					throw new RuntimeException(); // 回滚
-				}
-				return true;
-			} else if (existFileWithPath(path)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			throw new FileNotExsitException(path);
-		}
-		return false;
-	}
+	
 
 	/**
 	 * 查看数据库中是否有此path记录文件
