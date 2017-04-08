@@ -1,5 +1,6 @@
 package com.chinacreator.c2.qyb.fs.service;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.chinacreator.c2.dao.DaoFactory;
 import com.chinacreator.c2.dao.mybatis.enhance.Page;
 import com.chinacreator.c2.dao.mybatis.enhance.Pageable;
 import com.chinacreator.c2.fs.FileServer;
+import com.chinacreator.c2.fs.dir.DirFileServer;
 import com.chinacreator.c2.fs.exception.FileNotExsitException;
 import com.chinacreator.c2.ioc.ApplicationContextManager;
 import com.chinacreator.c2.qyb.fs.entity.UploadFile;
@@ -230,4 +232,22 @@ public class UploadFileService {
 		list=dao.select(con);
 		return list;
 	}
+	
+	/**
+	 *  根据path fileservice 返回文件
+	 * @param path
+	 * @param dirFileServiceName
+	 * @return
+	 */
+	public File getAttachFile(String path, String dirFileServiceName) {
+		DirFileServer dirFileServer;
+		if (dirFileServiceName == null) {
+			dirFileServer = ApplicationContextManager.getContext()
+					.getBean("dirFileServer", DirFileServer.class);
+		} else {
+			dirFileServer = ApplicationContextManager.getContext()
+					.getBean(dirFileServiceName, DirFileServer.class);
+		}
+		return dirFileServer.getFile(path);
+	}	
 }

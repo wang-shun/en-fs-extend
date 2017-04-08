@@ -27,5 +27,10 @@
     
 	<bean id="attachmentsUploadProcess" class="com.chinacreator.c2.qyb.fs.dir.process.CommonUploadFileProcess">
 	      		<constructor-arg index="0" value="qybdirprocess"/>
-	</bean>    
+	</bean>   
+	<bean id="mydirfileservice" class="com.chinacreator.c2.qyb.fs.file.SimpleDirFileServer">
+	      <constructor-arg index="0" value="${c2.dirfile.rootFolder}"/>
+	      <constructor-arg index="1" value="${c2.dirfile.pathFormat}"/>
+	</bean>  	 
+	
  </beans>      

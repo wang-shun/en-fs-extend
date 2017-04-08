@@ -32,13 +32,7 @@
 		  <version>4.2.8.6</version>
 		  <scope>provided</scope>		
 		</dependency>
-				
-		<dependency>
-		     <groupId>com.chinacreator.c2</groupId>
-		     <artifactId>c2-module-fs</artifactId>
-		     <version>1.1.9</version>
-		</dependency>
-		
+					
 <!-- 		<dependency>
 			<groupId>com.chinacreator.c2.xz</groupId>
 			<version>${project.version}</version>
@@ -93,12 +87,17 @@
 			<version>4.2.3</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+		     <groupId>com.chinacreator.c2</groupId>
+		     <artifactId>c2-module-fs</artifactId>
+		     <version>1.1.9.5</version>
+		</dependency>
 		
 		<dependency>
 		     <groupId>com.chinacreator.c2</groupId>
 		     <artifactId>c2-module-fs-dir</artifactId>
-		     <version>1.1.9</version>
-		     <scope>provided</scope>
+		     <version>1.1.9.5</version>
 		</dependency>
 		
 <!-- 		<dependency>
