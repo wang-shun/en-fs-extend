@@ -229,7 +229,10 @@ page_afterDataSourceLoad:function(){
 				&lt;a style=&quot;color: black&quot; ng-click=&quot;functions.viewfile(a)&quot;>{{a.displayName}}&lt;/a>
 				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_download(file)&quot; ng-click=&quot;functions.download(a.filePath)&quot;>下载&lt;/a>
 				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_del(file)&quot; ng-click=&quot;functions.deletefile(a)&quot;>删除&lt;/a>
-			&lt;/div>		
+			&lt;/div>	
+			&lt;div ng-if=&quot;!($model.uploadfiles.result.length > 0) &amp;&amp; !$model.writePermission&quot;>
+				无
+			&lt;/div>
 	    &lt;/div>
 	&lt;/div>
 
