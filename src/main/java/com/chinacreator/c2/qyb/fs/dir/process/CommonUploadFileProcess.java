@@ -65,7 +65,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 		String[] myDir1 = (String[]) map.get("myDir");
 		if (myDir1 != null) {
 			String myDir = myDir1[0];
-			if (myDir != null && !"undefined".equals(myDir)) {
+			if (myDir != null && !"undefined".equals(myDir) && !"".equals(myDir)) {
 				dirFileServer = ApplicationContextManager.getContext().getBean(myDir, FileServer.class);
 			} else {
 				dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);			

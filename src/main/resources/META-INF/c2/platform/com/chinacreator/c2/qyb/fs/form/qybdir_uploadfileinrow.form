@@ -86,15 +86,24 @@ page_onload:function(){
 		$model.writePermission = $params.writePermission	
 	}
 
-
 	$view.fileInputIframeinrow.setParams({
 		businessType:$params.businessType,
 		businessKey:$params.businessKey,
 		businessKey1:$params.businessKey1,
 		businessKey2:$params.businessKey2,
 		businessKey3:$params.businessKey3,
+		myDir:$params.myDir
 	})
 	functions.set_buttonlabel()
+	//ReactNative 环境回调
+	if (!angular.isUndefined(window.C2WebViewBridge)) {
+	    C2WebViewBridge.onMessage = function (message) {
+	    	alert('收到回调 刷新list'+message);
+			$model.uploadfiles.$load().then(function(data1){		
+				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:message,files:$model.uploadfiles.result})
+			})	    	
+	    };
+	}	
 },
 
 fileInputIframeinrow_onSuccess:function(data){
@@ -186,8 +195,26 @@ fileInputIframeinrow_onError:function(data){
 	}	
 },
 uploadclicked:function($event){
-	var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
-	div.click()
+	//ReactNative 环境
+    if (!angular.isUndefined(window.C2WebViewBridge)) {
+		var params = {
+				businessType:$params.businessType,
+				businessKey:$params.businessKey,
+				businessKey1:$params.businessKey1,
+				businessKey2:$params.businessKey2,
+				businessKey3:$params.businessKey3,
+				myDir:$params.myDir
+		}    
+    	var msg = {
+    			type: &quot;attachment&quot;,
+    			businessType: &quot;upload&quot;,
+    			params: params
+    	}
+    	C2WebViewBridge.send(msn);
+    } else {
+		var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
+		div.click()    
+    }
 },
 page_beforeDataSourceLoad:function($params){
 	$model.swith = false
