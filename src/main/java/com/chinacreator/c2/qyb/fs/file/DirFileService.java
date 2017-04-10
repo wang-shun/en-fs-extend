@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.chinacreator.c2.fs.FileInput;
 import com.chinacreator.c2.fs.FileMetadata;
 import com.chinacreator.c2.qyb.fs.dir.process.CommonUploadFileProcess;
 
+@Service
 public class DirFileService {
 	@Autowired
-	SimpleDirFileServer simpleDirFileServer;
+	DynamicPathDirFileServer simpleDirFileServer;
 	@Autowired
 	CommonUploadFileProcess commonUploadFileProcess;
 
@@ -41,12 +43,20 @@ public class DirFileService {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 	}
+
+	public void addFileAttach(List<File> files, String path, Map params) {
+		for(File file:files){
+			addFileAttach(file,path,params);
+		}
+	}	
 	
 	public void addFileDir(File file, String path) {
 		FileMetadata meta = new FileMetadata();

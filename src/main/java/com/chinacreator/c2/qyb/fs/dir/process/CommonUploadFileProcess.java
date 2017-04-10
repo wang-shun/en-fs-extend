@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+
 import com.chinacreator.c2.dao.Dao;
 import com.chinacreator.c2.dao.DaoFactory;
 import com.chinacreator.c2.fs.DownResult;
@@ -20,6 +21,7 @@ import com.chinacreator.c2.fs.web.MultiFileUploadResult;
 import com.chinacreator.c2.fs.web.Result;
 import com.chinacreator.c2.ioc.ApplicationContextManager;
 import com.chinacreator.c2.qyb.fs.entity.UploadFile;
+import com.chinacreator.c2.qyb.fs.file.DynamicPathDirFileServer;
 import com.chinacreator.c2.qyb.fs.service.UploadFileService;
 import com.chinacreator.c2.util.UUIDUtil;
 
@@ -36,6 +38,14 @@ public class CommonUploadFileProcess extends UploadProcess {
 	private FileServer dirFileServer; // 目录存储
 	private UploadFileService uploadfileservice;
 
+	public final static String PARAM_TYPE = "businessType";
+	public final static String PARAM_KEY = "businessKey";
+	public final static String PARAM_KEY1 = "businessKey1";
+	public final static String PARAM_KEY2 = "businessKey2";
+	public final static String PARAM_KEY3 = "businessKey3";
+	public final static String PARAM_SERVER = "myDir";
+	public final static String PARAM_PATH = "path";
+	
 	public CommonUploadFileProcess(String processName) {
 		super(processName);
 	}
@@ -51,28 +61,26 @@ public class CommonUploadFileProcess extends UploadProcess {
 	}
 
 	// 编程方式获取spring目录存储bean
-		private FileServer getDirFileServer(Map<String, Object> map) {
-			String[] myDir1 = (String[]) map.get("myDir");
-			if(myDir1 != null){
-				String myDir = myDir1[0];
-				if(myDir != null && !"undefined".equals(myDir)){
-					dirFileServer = ApplicationContextManager.getContext().getBean(
-							myDir, FileServer.class);
-				}else{
-					if (dirFileServer == null) {
-						   dirFileServer = ApplicationContextManager.getContext().getBean(
-								 "dirFileServer", FileServer.class);
-					}
-				
-				}
-			}else{
+	private FileServer getDirFileServer(Map<String, Object> map) {
+		String[] myDir1 = (String[]) map.get("myDir");
+		if (myDir1 != null) {
+			String myDir = myDir1[0];
+			if (myDir != null && !"undefined".equals(myDir)) {
+				dirFileServer = ApplicationContextManager.getContext().getBean(myDir, FileServer.class);
+			} else {
 				if (dirFileServer == null) {
-					   dirFileServer = ApplicationContextManager.getContext().getBean(
-							 "dirFileServer", FileServer.class);
+					dirFileServer = ApplicationContextManager.getContext()
+							.getBean("qybDirFileServer", FileServer.class);
 				}
+
 			}
-			return dirFileServer;	
+		} else {
+			if (dirFileServer == null) {
+				dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);
+			}
 		}
+		return dirFileServer;
+	}
 	
 	// 编程方式获取spring目录存储bean
 //	private FileServer getDirFileServer1(String myDir) {
@@ -185,11 +193,19 @@ public class CommonUploadFileProcess extends UploadProcess {
 		String[] businessKey2s = (String[]) map.get("businessKey2");
 		String[] businessKey3s = (String[]) map.get("businessKey3");
 		String[] myDir1 = (String[]) map.get("myDir");
+
 		String businessType = businessTypes[0];
 		String businessKey = businessKeys[0];
 		String businessKey1 = null;
 		String businessKey2 = null;
 		String businessKey3 = null;
+		//业务模块要求的存储路径
+		String[] paths = (String[]) map.get("path");
+		String dynamicPath = null;
+		if(paths != null){
+			dynamicPath = paths[0];
+		}
+		
 		if (businessKey1s != null) {
 			businessKey1 = businessKey1s[0];
 		}
@@ -228,8 +244,15 @@ public class CommonUploadFileProcess extends UploadProcess {
 							businessType, filename, businessKey, businessKey1,
 							businessKey2, businessKey3);
 					if (fileexist == null) {
-						fileMetadata = server.add(is,
-								fileInput.getFileMetadata());
+						//如果是动态路径文件存储器
+						if(server instanceof DynamicPathDirFileServer){
+							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
+									fileInput.getFileMetadata(),dynamicPath);							
+						}else{
+							fileMetadata = server.add(is,
+									fileInput.getFileMetadata());							
+						}
+
 						// 将保存后的附件信息添加到结果集中
 						FileUploadResult fr = new FileUploadResult(
 								HttpType.SUCCESS.ordinal(), "成功",
@@ -243,8 +266,15 @@ public class CommonUploadFileProcess extends UploadProcess {
 								businessKey1, businessKey2, businessKey3);
 						mfr.addFileUploadResult(fr);
 					} else {
-						this.processDelete(fileexist.getFilePath(), null);
-						fileMetadata = server.add(is, fileMetadata);
+						this.processDelete(fileexist.getFilePath(), map);
+						//如果是动态路径文件存储器
+						if(server instanceof DynamicPathDirFileServer){
+							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
+									fileInput.getFileMetadata(),dynamicPath);							
+						}else{
+							fileMetadata = server.add(is,
+									fileInput.getFileMetadata());							
+						}
 						FileUploadResult fr = new FileUploadResult(
 								HttpType.SUCCESS.ordinal(), "成功",
 								fileMetadata.getName(), fileMetadata.getPath(),
@@ -270,7 +300,14 @@ public class CommonUploadFileProcess extends UploadProcess {
 						businessType, filename, businessKey, businessKey1,
 						businessKey2, businessKey3);
 				if (fileexist == null) {
-					fileMetadata = server.add(is, fileInput.getFileMetadata());
+					//如果是动态路径文件存储器
+					if(server instanceof DynamicPathDirFileServer){
+						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
+								fileInput.getFileMetadata(),dynamicPath);							
+					}else{
+						fileMetadata = server.add(is,
+								fileInput.getFileMetadata());							
+					}
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),
@@ -284,8 +321,15 @@ public class CommonUploadFileProcess extends UploadProcess {
 							businessKey1, businessKey2, businessKey3);
 				} else {
 					// 判断是用户更新同一份文件之后，fileserver的updata操作实现会出错，只好删除原来文件再添加。
-					this.processDelete(fileexist.getFilePath(), null);
-					fileMetadata = server.add(is, fileMetadata);
+					this.processDelete(fileexist.getFilePath(), map);
+					//如果是动态路径文件存储器
+					if(server instanceof DynamicPathDirFileServer){
+						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
+								fileInput.getFileMetadata(),dynamicPath);							
+					}else{
+						fileMetadata = server.add(is,
+								fileInput.getFileMetadata());							
+					}
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),

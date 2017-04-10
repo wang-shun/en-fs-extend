@@ -22,12 +22,12 @@ import com.chinacreator.c2.fs.util.PathFormat;
  * 本地简单目录文件服务器实现
  * @author hushowly
  */
-public class SimpleDirFileServer implements HTTPFileServer{
+public class QybDirFileServer implements HTTPFileServer{
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(SimpleDirFileServer.class);
-	private File root;
+	private static final Logger LOGGER = LoggerFactory.getLogger(QybDirFileServer.class);
+	protected File root;
 	private boolean valid = false;
-	private String pathFormat;
+	protected String pathFormat;
 	private Long maxSize;
 	private String allowFiles;
 	
@@ -55,7 +55,7 @@ public class SimpleDirFileServer implements HTTPFileServer{
 	 * 创建简单目录文件服务器
 	 * @param rootPath
 	 */
-	public SimpleDirFileServer(String rootPath) {
+	public QybDirFileServer(String rootPath) {
 		this.init(rootPath);
 	}
 	
@@ -64,7 +64,7 @@ public class SimpleDirFileServer implements HTTPFileServer{
 	 * 创建简单目录文件服务器
 	 * @param rootPath
 	 */
-	public SimpleDirFileServer(String rootPath,String pathFormat) {
+	public QybDirFileServer(String rootPath,String pathFormat) {
 		this.init(rootPath);
 		this.pathFormat=pathFormat;
 	}
@@ -74,7 +74,7 @@ public class SimpleDirFileServer implements HTTPFileServer{
 	 * 创建简单目录文件服务器
 	 * @param rootPath
 	 */
-	public SimpleDirFileServer(String rootPath,String pathFormat,Long maxSize){
+	public QybDirFileServer(String rootPath,String pathFormat,Long maxSize){
 		this.init(rootPath);
 		this.pathFormat=pathFormat;
 		this.maxSize=maxSize;
@@ -84,7 +84,7 @@ public class SimpleDirFileServer implements HTTPFileServer{
 	 * 创建简单目录文件服务器
 	 * @param rootPath
 	 */
-	public SimpleDirFileServer(String rootPath,String pathFormat,Long maxSize,String allowFiles){
+	public QybDirFileServer(String rootPath,String pathFormat,Long maxSize,String allowFiles){
 		this.init(rootPath);
 		this.pathFormat=pathFormat;
 		this.maxSize=maxSize;
@@ -112,8 +112,7 @@ public class SimpleDirFileServer implements HTTPFileServer{
 		try {
 			
 			String fileName=metadata.getName();
-			//如果有path 并且没有pathformat 那么就存这个path
-			String filePath=metadata.getPath();
+			String filePath=metadata.getName();
 			//创建父目录
 			if(StringUtils.isNotEmpty(this.pathFormat)){
 				
@@ -178,8 +177,6 @@ public class SimpleDirFileServer implements HTTPFileServer{
 		return metadata;
 	}
 	
-
-	
 	
 	@Override
 	public boolean delete(String path, boolean force) {
@@ -198,6 +195,11 @@ public class SimpleDirFileServer implements HTTPFileServer{
 	public InputStream get(String path) throws IOException {
 		File file=new File(root,path);
 		return new FileInputStream(file);
+	}
+	
+	public File getFile(String path){
+		File file=new File(root,path);
+		return file;
 	}
 	
 	@Override
