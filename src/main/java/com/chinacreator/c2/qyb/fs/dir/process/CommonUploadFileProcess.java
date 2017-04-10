@@ -68,16 +68,10 @@ public class CommonUploadFileProcess extends UploadProcess {
 			if (myDir != null && !"undefined".equals(myDir)) {
 				dirFileServer = ApplicationContextManager.getContext().getBean(myDir, FileServer.class);
 			} else {
-				if (dirFileServer == null) {
-					dirFileServer = ApplicationContextManager.getContext()
-							.getBean("qybDirFileServer", FileServer.class);
-				}
-
+				dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);			
 			}
 		} else {
-			if (dirFileServer == null) {
-				dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);
-			}
+			dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);			
 		}
 		return dirFileServer;
 	}
