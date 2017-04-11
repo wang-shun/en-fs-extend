@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 
 import com.chinacreator.c2.fs.FileInput;
 import com.chinacreator.c2.fs.FileMetadata;
+import com.chinacreator.c2.fs.FileServer;
+import com.chinacreator.c2.fs.dir.impl.SimpleDirFileServer;
+import com.chinacreator.c2.ioc.ApplicationContextManager;
 import com.chinacreator.c2.qyb.fs.dir.process.CommonUploadFileProcess;
 
 @Service
 public class DirFileService {
-	@Autowired
-	DynamicPathDirFileServer simpleDirFileServer;
+	FileServer simpleDirFileServer;
 	@Autowired
 	CommonUploadFileProcess commonUploadFileProcess;
 
@@ -58,7 +60,7 @@ public class DirFileService {
 		}
 	}	
 	
-	public void addFileDir(File file, String path) {
+	public void addFileDir(File file, String path, Map params) {
 		FileMetadata meta = new FileMetadata();
 		meta.setFilesize(file.getTotalSpace());
 		meta.setName(file.getName());
@@ -66,14 +68,39 @@ public class DirFileService {
 		// meta.setMimetype(file.g);
 		try {
 			 InputStream in = new FileInputStream(file);
-			 simpleDirFileServer.add(in, meta);
+			 simpleDirFileServer = getDirFileServer(params);
+			 if(simpleDirFileServer instanceof DynamicPathDirFileServer){
+				 simpleDirFileServer = (DynamicPathDirFileServer) simpleDirFileServer;
+				 ((DynamicPathDirFileServer) simpleDirFileServer).add(in, meta, path);
+			 }else{
+				 simpleDirFileServer.add(in, meta);
+			 }
+			 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}	
 	}	
 
+	// 编程方式获取spring目录存储bean
+	private FileServer getDirFileServer(Map<String, Object> map) {
+		String[] myDir1 = (String[]) map.get("myDir");
+		if (myDir1 != null) {
+			String myDir = myDir1[0];
+			if (myDir != null && !"undefined".equals(myDir) && !"".equals(myDir)) {
+				simpleDirFileServer = ApplicationContextManager.getContext().getBean(myDir, SimpleDirFileServer.class);
+			} else {
+				simpleDirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", SimpleDirFileServer.class);			
+			}
+		} else {
+			simpleDirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", SimpleDirFileServer.class);			
+		}
+		return simpleDirFileServer;
+	}
 }
