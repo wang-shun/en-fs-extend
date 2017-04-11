@@ -98,7 +98,10 @@ page_onload:function(){
 	//ReactNative 环境回调
 	if (!angular.isUndefined(window.C2WebViewBridge)) {
 	    C2WebViewBridge.onMessage = function (message) {
-	    	alert('收到回调 刷新list'+message);
+			Messenger.post({
+			    'message': &quot;RN 回调&quot;+JSON.stringify(message),
+			    'type': 'error',
+			});
 			$model.uploadfiles.$load().then(function(data1){		
 				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:message,files:$model.uploadfiles.result})
 			})	    	
@@ -196,8 +199,9 @@ fileInputIframeinrow_onError:function(data){
 },
 uploadclicked:function($event){
 	//ReactNative 环境
-    if (!angular.isUndefined(window.C2WebViewBridge)) {
-		var params = {
+    if (!angular.isUndefined(window.C2WebViewBridge)) {    
+    	console.log(&quot;RN&quot;)
+		var params = {    			
 				businessType:$params.businessType,
 				businessKey:$params.businessKey,
 				businessKey1:$params.businessKey1,
@@ -209,8 +213,8 @@ uploadclicked:function($event){
     			type: &quot;attachment&quot;,
     			businessType: &quot;upload&quot;,
     			params: params
-    	}
-    	C2WebViewBridge.send(msn);
+    	}  	
+    	window.C2WebViewBridge.send(JSON.stringify(msg)); 	
     } else {
 		var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
 		div.click()    
