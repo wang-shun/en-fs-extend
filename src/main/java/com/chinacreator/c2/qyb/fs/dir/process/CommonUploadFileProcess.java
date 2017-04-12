@@ -131,21 +131,20 @@ public class CommonUploadFileProcess extends UploadProcess {
 		try {
 			Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
 			FileServer server = this.getDirFileServer(map);
-			if (server.delete(path, true)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-				UploadFile con = dao.selectOne(uf);
-				int r = dao.delete(con);
-				if (r == 0) {
-					throw new RuntimeException(); // 回滚
-				}
-				return true;
-			} else if (existFileWithPath(path)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-
+			
+			UploadFile uf = new UploadFile();
+			uf.setFilePath(path);
+			UploadFile con = dao.selectOne(uf);
+			int r = dao.delete(con);
+			if (r == 0) { //删除没成功
+				throw new RuntimeException("删除附件表失败"); // 回滚
+			}else{
+				if (server.delete(path, true)) {
+					return true;
+				} else {
+					//文件删除失败
+				}				
 			}
-
 		} catch (FileNotFoundException e) {
 			throw new FileNotExsitException(path);
 		}
@@ -240,6 +239,9 @@ public class CommonUploadFileProcess extends UploadProcess {
 					if (fileexist == null) {
 						//如果是动态路径文件存储器
 						if(server instanceof DynamicPathDirFileServer){
+							if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+								throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+							}
 							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
 									fileInput.getFileMetadata(),dynamicPath);							
 						}else{
@@ -263,6 +265,9 @@ public class CommonUploadFileProcess extends UploadProcess {
 						this.processDelete(fileexist.getFilePath(), map);
 						//如果是动态路径文件存储器
 						if(server instanceof DynamicPathDirFileServer){
+							if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+								throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+							}
 							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
 									fileInput.getFileMetadata(),dynamicPath);							
 						}else{
@@ -296,6 +301,9 @@ public class CommonUploadFileProcess extends UploadProcess {
 				if (fileexist == null) {
 					//如果是动态路径文件存储器
 					if(server instanceof DynamicPathDirFileServer){
+						if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+							throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+						}
 						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
 								fileInput.getFileMetadata(),dynamicPath);							
 					}else{
@@ -318,6 +326,9 @@ public class CommonUploadFileProcess extends UploadProcess {
 					this.processDelete(fileexist.getFilePath(), map);
 					//如果是动态路径文件存储器
 					if(server instanceof DynamicPathDirFileServer){
+						if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+							throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+						}						
 						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
 								fileInput.getFileMetadata(),dynamicPath);							
 					}else{
