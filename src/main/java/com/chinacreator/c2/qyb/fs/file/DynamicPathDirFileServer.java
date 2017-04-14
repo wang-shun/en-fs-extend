@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tika.mime.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.chinacreator.c2.fs.FileInput;
 import com.chinacreator.c2.fs.FileMetadata;
 import com.chinacreator.c2.fs.util.ContentTypeUtil;
 import com.chinacreator.c2.fs.util.PathFormat;
@@ -19,7 +21,7 @@ import com.chinacreator.c2.fs.util.PathFormat;
  * 本地简单目录文件服务器实现
  * @author hushowly
  */
-public class DynamicPathDirFileServer extends QybDirFileServer{
+public abstract class DynamicPathDirFileServer extends QybDirFileServer{
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DynamicPathDirFileServer.class);
 	private boolean valid = false;
@@ -61,6 +63,7 @@ public class DynamicPathDirFileServer extends QybDirFileServer{
 		super(rootPath,pathFormat,maxSize,allowFiles);
 	}
 	
+	public abstract String getDynamicPath(FileInput fileInput, Map params); 
 	
 	public FileMetadata add(InputStream content,FileMetadata metadata,String path)
 			throws IOException {

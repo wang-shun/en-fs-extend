@@ -1,6 +1,7 @@
 package com.chinacreator.c2.qyb.fs.dir.process;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
@@ -237,17 +238,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 							businessType, filename, businessKey, businessKey1,
 							businessKey2, businessKey3);
 					if (fileexist == null) {
-						//如果是动态路径文件存储器
-						if(server instanceof DynamicPathDirFileServer){
-							if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
-								throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
-							}
-							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
-									fileInput.getFileMetadata(),dynamicPath);							
-						}else{
-							fileMetadata = server.add(is,
-									fileInput.getFileMetadata());							
-						}
+						fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
 
 						// 将保存后的附件信息添加到结果集中
 						FileUploadResult fr = new FileUploadResult(
@@ -263,17 +254,8 @@ public class CommonUploadFileProcess extends UploadProcess {
 						mfr.addFileUploadResult(fr);
 					} else {
 						this.processDelete(fileexist.getFilePath(), map);
-						//如果是动态路径文件存储器
-						if(server instanceof DynamicPathDirFileServer){
-							if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
-								throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
-							}
-							fileMetadata = ((DynamicPathDirFileServer)server).add(is,
-									fileInput.getFileMetadata(),dynamicPath);							
-						}else{
-							fileMetadata = server.add(is,
-									fileInput.getFileMetadata());							
-						}
+						fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
+
 						FileUploadResult fr = new FileUploadResult(
 								HttpType.SUCCESS.ordinal(), "成功",
 								fileMetadata.getName(), fileMetadata.getPath(),
@@ -291,7 +273,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 				uploadResult = mfr;
 			} else {
 				FileInput fileInput = fileList.get(0);
-				InputStream is = fileInput.getInputStream();
+//				InputStream is = fileInput.getInputStream();
 				FileMetadata fileMetadata = fileInput.getFileMetadata();
 				filename = fileMetadata.getName();
 				// 判断是否是用户更新同一份文件
@@ -299,17 +281,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 						businessType, filename, businessKey, businessKey1,
 						businessKey2, businessKey3);
 				if (fileexist == null) {
-					//如果是动态路径文件存储器
-					if(server instanceof DynamicPathDirFileServer){
-						if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
-							throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
-						}
-						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
-								fileInput.getFileMetadata(),dynamicPath);							
-					}else{
-						fileMetadata = server.add(is,
-								fileInput.getFileMetadata());							
-					}
+					fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),
@@ -324,17 +296,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 				} else {
 					// 判断是用户更新同一份文件之后，fileserver的updata操作实现会出错，只好删除原来文件再添加。
 					this.processDelete(fileexist.getFilePath(), map);
-					//如果是动态路径文件存储器
-					if(server instanceof DynamicPathDirFileServer){
-						if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
-							throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
-						}						
-						fileMetadata = ((DynamicPathDirFileServer)server).add(is,
-								fileInput.getFileMetadata(),dynamicPath);							
-					}else{
-						fileMetadata = server.add(is,
-								fileInput.getFileMetadata());							
-					}
+					fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),
@@ -358,6 +320,25 @@ public class CommonUploadFileProcess extends UploadProcess {
 		return uploadResult;
 	}
 
+	private FileMetadata doServerAdd(FileServer server,FileInput fileInput,Map params,String dynamicPath) throws Exception{
+		FileMetadata fileMetadata;
+		//如果是动态路径文件存储器
+		if(server instanceof DynamicPathDirFileServer){
+			if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+				dynamicPath = ((DynamicPathDirFileServer)server).getDynamicPath(fileInput,params);
+				if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+					throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+				}
+			}
+			fileMetadata = ((DynamicPathDirFileServer)server).add(fileInput.getInputStream(),
+					fileInput.getFileMetadata(),dynamicPath);							
+		}else{
+			fileMetadata = server.add(fileInput.getInputStream(),
+					fileInput.getFileMetadata());							
+		}	
+		return fileMetadata;
+	}
+	
 	/**
 	 * 更新数据库
 	 * 

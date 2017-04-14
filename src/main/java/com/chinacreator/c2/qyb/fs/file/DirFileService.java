@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,26 @@ public class DirFileService {
 	@Autowired
 	CommonUploadFileProcess commonUploadFileProcess;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void addFileAttach(File file, String path, String businessType,
+			String businessKey,String businessKey1,String businessKey2,
+			String businessKey3,String fileServer,Map params) {
+		if(params == null){
+			params = new HashMap();
+		}
+		params.put(CommonUploadFileProcess.PARAM_TYPE, new String[] { businessType });
+		params.put(CommonUploadFileProcess.PARAM_KEY, new String[] { businessKey });
+		params.put(CommonUploadFileProcess.PARAM_KEY1, new String[] { businessKey1 });		
+		params.put(CommonUploadFileProcess.PARAM_KEY2, new String[] { businessKey2 });	
+		params.put(CommonUploadFileProcess.PARAM_KEY3, new String[] { businessKey3 });	
+		params.put(CommonUploadFileProcess.PARAM_SERVER, new String[] { fileServer });
+		if(path == null){ //从fileServer获取path
+			
+		}
+		params.put(CommonUploadFileProcess.PARAM_PATH, new String[] { path });
+		addFileAttach(file, path, params);
+	}	
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addFileAttach(File file, String path, Map params) {
 		FileMetadata meta = new FileMetadata();

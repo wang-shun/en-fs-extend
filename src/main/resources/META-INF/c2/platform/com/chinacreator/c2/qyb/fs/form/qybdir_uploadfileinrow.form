@@ -86,16 +86,9 @@ page_onload:function(){
 		$model.writePermission = $params.writePermission	
 	}
 
-	$model.fileParams = {
-		businessType:$params.businessType,
-		businessKey:$params.businessKey,
-		businessKey1:$params.businessKey1,
-		businessKey2:$params.businessKey2,
-		businessKey3:$params.businessKey3,
-		myDir:$params.myDir
-	}
+	$model.fileParams = $params
 
-	$view.fileInputIframeinrow.setParams($model.fileParams)
+	$view.fileInputIframeinrow.setParams($params)
 	functions.set_buttonlabel()
 	//ReactNative 环境回调
 	if (!angular.isUndefined(window.C2WebViewBridge)) {
