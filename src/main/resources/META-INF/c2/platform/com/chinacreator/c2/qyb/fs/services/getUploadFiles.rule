@@ -6,8 +6,8 @@
   <name>获取附件</name>
   <desc>获取指定id 和 key 的记录条数</desc>
   <inputs>
-    <input collection="false" desc="请必填" id="businessType" required="false" type="String"/>
-    <input collection="false" desc="请必填" id="businessKey" required="true" type="String"/>
+    <input collection="false" desc="请必填" id="businessType" required="true" type="String"/>
+    <input collection="false" desc="请必填" id="businessKey" required="false" type="String"/>
     <input collection="false" desc="请必填" id="businessKey1" required="false" type="String"/>
     <input collection="false" desc="请必填" id="businessKey2" required="false" type="String"/>
     <input collection="false" desc="请必填" id="businessKey3" required="false" type="String"/>

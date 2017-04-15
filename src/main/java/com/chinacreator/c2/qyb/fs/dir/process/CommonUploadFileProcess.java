@@ -189,7 +189,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 		String[] myDir1 = (String[]) map.get("myDir");
 
 		String businessType = businessTypes[0];
-		String businessKey = businessKeys[0];
+		String businessKey = null;
 		String businessKey1 = null;
 		String businessKey2 = null;
 		String businessKey3 = null;
@@ -199,17 +199,19 @@ public class CommonUploadFileProcess extends UploadProcess {
 		if(paths != null){
 			dynamicPath = paths[0];
 		}
-		
+		if (businessKeys != null) {
+			businessKey = businessKeys[0];
+		}		
 		if (businessKey1s != null) {
 			businessKey1 = businessKey1s[0];
 		}
 		if (businessKey2s != null) {
 			businessKey2 = businessKey2s[0];
-		}
+		}	
 		if (businessKey3s != null) {
 			businessKey3 = businessKey3s[0];
 		}
-		if (businessType == null || businessKey == null) {
+		if (businessType == null) {
 			return new FileUploadResult(HttpType.ERROR.ordinal(),
 					"businessType businessKey不能为空", null, null, null);
 		}
