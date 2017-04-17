@@ -408,6 +408,7 @@ newField2_click:function($event){
 		businessKey1:$params.businessKey1,
 		businessKey2:$params.businessKey2,
 		businessKey3:$params.businessKey3,
+		myDir:$params.myDir,
 	});
 },
 //上传成功回调

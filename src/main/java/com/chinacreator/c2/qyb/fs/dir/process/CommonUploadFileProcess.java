@@ -1,11 +1,14 @@
 package com.chinacreator.c2.qyb.fs.dir.process;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import com.chinacreator.c2.dao.Dao;
+import com.chinacreator.c2.dao.DaoFactory;
 import com.chinacreator.c2.fs.DownResult;
 import com.chinacreator.c2.fs.FileInput;
 import com.chinacreator.c2.fs.FileMetadata;
@@ -19,6 +22,7 @@ import com.chinacreator.c2.fs.web.MultiFileUploadResult;
 import com.chinacreator.c2.fs.web.Result;
 import com.chinacreator.c2.ioc.ApplicationContextManager;
 import com.chinacreator.c2.qyb.fs.entity.UploadFile;
+import com.chinacreator.c2.qyb.fs.file.DynamicPathDirFileServer;
 import com.chinacreator.c2.qyb.fs.service.UploadFileService;
 import com.chinacreator.c2.util.UUIDUtil;
 
@@ -35,6 +39,14 @@ public class CommonUploadFileProcess extends UploadProcess {
 	private FileServer dirFileServer; // 目录存储
 	private UploadFileService uploadfileservice;
 
+	public final static String PARAM_TYPE = "businessType";
+	public final static String PARAM_KEY = "businessKey";
+	public final static String PARAM_KEY1 = "businessKey1";
+	public final static String PARAM_KEY2 = "businessKey2";
+	public final static String PARAM_KEY3 = "businessKey3";
+	public final static String PARAM_SERVER = "myDir";
+	public final static String PARAM_PATH = "path";
+	
 	public CommonUploadFileProcess(String processName) {
 		super(processName);
 	}
@@ -50,22 +62,37 @@ public class CommonUploadFileProcess extends UploadProcess {
 	}
 
 	// 编程方式获取spring目录存储bean
-	private FileServer getDirFileServer() {
-		if (dirFileServer == null) {
-			dirFileServer = ApplicationContextManager.getContext().getBean(
-					"dirFileServer", FileServer.class);
+	private FileServer getDirFileServer(Map<String, Object> map) {
+		String[] myDir1 = (String[]) map.get("myDir");
+		if (myDir1 != null) {
+			String myDir = myDir1[0];
+			if (myDir != null && !"undefined".equals(myDir) && !"".equals(myDir)) {
+				dirFileServer = ApplicationContextManager.getContext().getBean(myDir, FileServer.class);
+			} else {
+				dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);			
+			}
+		} else {
+			dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", FileServer.class);			
 		}
 		return dirFileServer;
 	}
+	
+	// 编程方式获取spring目录存储bean
+//	private FileServer getDirFileServer1(String myDir) {
+//		dirFileServer = ApplicationContextManager.getContext().getBean(
+//				myDir, FileServer.class);
+//		return dirFileServer;
+//	}
+	
 
 	/**
 	 * 判断文件是否存在
 	 */
 	@Override
-	public boolean exist(String arg0, Map<String, Object> arg1)
+	public boolean exist(String arg0, Map<String, Object> map)
 			throws Exception {
 
-		FileServer server = this.getDirFileServer();
+		FileServer server = this.getDirFileServer(map);
 		return server.exsits(arg0);
 	}
 
@@ -73,9 +100,56 @@ public class CommonUploadFileProcess extends UploadProcess {
 	 * 处理文件删除
 	 */
 	// @Transactional
-	public boolean processDelete(String path, Map<String, Object> arg1)
+//	public boolean processDelete(String path, Map<String, Object> arg1)
+//			throws Exception {
+//		return this.getUploadFileServer().processDelete(path, arg1);
+//	}
+	
+	/**
+	 * 查看数据库中是否有此path记录文件
+	 * 
+	 * @param path
+	 * @return
+	 */
+	public boolean existFileWithPath(String path) {
+		Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
+		UploadFile file = new UploadFile();
+		file.setFilePath(path);
+		List<UploadFile> files = dao.select(file);
+		if (files == null || files.size() == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * 文件处理器处理文件删除
+	 */
+//	@Transactional
+	public boolean processDelete(String path, Map<String, Object> map)
 			throws Exception {
-		return this.getUploadFileServer().processDelete(path, arg1);
+		try {
+			Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
+			FileServer server = this.getDirFileServer(map);
+			
+			UploadFile uf = new UploadFile();
+			uf.setFilePath(path);
+			UploadFile con = dao.selectOne(uf);
+			int r = dao.delete(con);
+			if (r == 0) { //删除没成功
+				throw new RuntimeException("删除附件表失败"); // 回滚
+			}else{
+				if (server.delete(path, true)) {
+					return true;
+				} else {
+					//文件删除失败
+				}				
+			}
+		} catch (FileNotFoundException e) {
+			throw new FileNotExsitException(path);
+		}
+		return false;
 	}
 
 	/**
@@ -83,11 +157,11 @@ public class CommonUploadFileProcess extends UploadProcess {
 	 */
 	@Override
 	// @Transactional
-	public DownResult processDown(String fpath, Map<String, Object> arg1)
+	public DownResult processDown(String fpath, Map<String, Object> map)
 			throws Exception {
 		try {
+			FileServer server = this.getDirFileServer(map);
 			DownResult downResult = new DownResult();
-			FileServer server = this.getDirFileServer();
 			InputStream is = server.get(fpath);
 			FileMetadata fm = server.getMetaData(fpath);
 			downResult.setInputStream(is);
@@ -112,25 +186,36 @@ public class CommonUploadFileProcess extends UploadProcess {
 		String[] businessKey1s = (String[]) map.get("businessKey1");
 		String[] businessKey2s = (String[]) map.get("businessKey2");
 		String[] businessKey3s = (String[]) map.get("businessKey3");
+		String[] myDir1 = (String[]) map.get("myDir");
+
 		String businessType = businessTypes[0];
-		String businessKey = businessKeys[0];
+		String businessKey = null;
 		String businessKey1 = null;
 		String businessKey2 = null;
 		String businessKey3 = null;
+		//业务模块要求的存储路径
+		String[] paths = (String[]) map.get("path");
+		String dynamicPath = null;
+		if(paths != null){
+			dynamicPath = paths[0];
+		}
+		if (businessKeys != null) {
+			businessKey = businessKeys[0];
+		}		
 		if (businessKey1s != null) {
 			businessKey1 = businessKey1s[0];
 		}
 		if (businessKey2s != null) {
 			businessKey2 = businessKey2s[0];
-		}
+		}	
 		if (businessKey3s != null) {
 			businessKey3 = businessKey3s[0];
 		}
-		if (businessType == null || businessKey == null) {
+		if (businessType == null) {
 			return new FileUploadResult(HttpType.ERROR.ordinal(),
 					"businessType businessKey不能为空", null, null, null);
 		}
-
+		
 		String filename = null;
 		UploadFileService ufs = this.getUploadFileServer();
 
@@ -140,9 +225,8 @@ public class CommonUploadFileProcess extends UploadProcess {
 
 			if (fileList.size() <= 0)
 				throw new Exception("上传文件不能为空");
-
-			FileServer server = this.getDirFileServer();
-
+			FileServer server = this.getDirFileServer(map);
+			
 			// 为了兼容以前，单附件和多附件格式不能统一
 			if (fileList.size() > 1) {
 				MultiFileUploadResult mfr = new MultiFileUploadResult(
@@ -156,8 +240,8 @@ public class CommonUploadFileProcess extends UploadProcess {
 							businessType, filename, businessKey, businessKey1,
 							businessKey2, businessKey3);
 					if (fileexist == null) {
-						fileMetadata = server.add(is,
-								fileInput.getFileMetadata());
+						fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
+
 						// 将保存后的附件信息添加到结果集中
 						FileUploadResult fr = new FileUploadResult(
 								HttpType.SUCCESS.ordinal(), "成功",
@@ -171,8 +255,9 @@ public class CommonUploadFileProcess extends UploadProcess {
 								businessKey1, businessKey2, businessKey3);
 						mfr.addFileUploadResult(fr);
 					} else {
-						this.processDelete(fileexist.getFilePath(), null);
-						fileMetadata = server.add(is, fileMetadata);
+						this.processDelete(fileexist.getFilePath(), map);
+						fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
+
 						FileUploadResult fr = new FileUploadResult(
 								HttpType.SUCCESS.ordinal(), "成功",
 								fileMetadata.getName(), fileMetadata.getPath(),
@@ -190,7 +275,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 				uploadResult = mfr;
 			} else {
 				FileInput fileInput = fileList.get(0);
-				InputStream is = fileInput.getInputStream();
+//				InputStream is = fileInput.getInputStream();
 				FileMetadata fileMetadata = fileInput.getFileMetadata();
 				filename = fileMetadata.getName();
 				// 判断是否是用户更新同一份文件
@@ -198,7 +283,7 @@ public class CommonUploadFileProcess extends UploadProcess {
 						businessType, filename, businessKey, businessKey1,
 						businessKey2, businessKey3);
 				if (fileexist == null) {
-					fileMetadata = server.add(is, fileInput.getFileMetadata());
+					fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),
@@ -212,8 +297,8 @@ public class CommonUploadFileProcess extends UploadProcess {
 							businessKey1, businessKey2, businessKey3);
 				} else {
 					// 判断是用户更新同一份文件之后，fileserver的updata操作实现会出错，只好删除原来文件再添加。
-					this.processDelete(fileexist.getFilePath(), null);
-					fileMetadata = server.add(is, fileMetadata);
+					this.processDelete(fileexist.getFilePath(), map);
+					fileMetadata = doServerAdd(server, fileInput, map, dynamicPath);
 					FileUploadResult fr = new FileUploadResult(
 							HttpType.SUCCESS.ordinal(), "成功",
 							fileMetadata.getName(), fileMetadata.getPath(),
@@ -237,6 +322,25 @@ public class CommonUploadFileProcess extends UploadProcess {
 		return uploadResult;
 	}
 
+	private FileMetadata doServerAdd(FileServer server,FileInput fileInput,Map params,String dynamicPath) throws Exception{
+		FileMetadata fileMetadata;
+		//如果是动态路径文件存储器
+		if(server instanceof DynamicPathDirFileServer){
+			if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+				dynamicPath = ((DynamicPathDirFileServer)server).getDynamicPath(fileInput,params);
+				if(dynamicPath == null || "".equals(dynamicPath) || "undefined".equals(dynamicPath)){
+					throw new RuntimeException("动态路径文件存储器 没有传入路径参数");
+				}
+			}
+			fileMetadata = ((DynamicPathDirFileServer)server).add(fileInput.getInputStream(),
+					fileInput.getFileMetadata(),dynamicPath);							
+		}else{
+			fileMetadata = server.add(fileInput.getInputStream(),
+					fileInput.getFileMetadata());							
+		}	
+		return fileMetadata;
+	}
+	
 	/**
 	 * 更新数据库
 	 * 

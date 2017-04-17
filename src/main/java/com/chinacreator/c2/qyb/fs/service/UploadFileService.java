@@ -1,21 +1,21 @@
 package com.chinacreator.c2.qyb.fs.service;
 
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.chinacreator.c2.dao.Dao;
 import com.chinacreator.c2.dao.DaoFactory;
 import com.chinacreator.c2.dao.mybatis.enhance.Page;
 import com.chinacreator.c2.dao.mybatis.enhance.Pageable;
-import com.chinacreator.c2.fs.FileServer;
-import com.chinacreator.c2.fs.exception.FileNotExsitException;
 import com.chinacreator.c2.ioc.ApplicationContextManager;
 import com.chinacreator.c2.qyb.fs.entity.UploadFile;
+import com.chinacreator.c2.qyb.fs.file.QybDirFileServer;
 
 /**
  * 
@@ -28,7 +28,7 @@ import com.chinacreator.c2.qyb.fs.entity.UploadFile;
 
 @Service
 public class UploadFileService {
-	private FileServer dirFileServer;
+	private QybDirFileServer dirFileServer;
 
 	/**
 	 * 插入记录
@@ -159,44 +159,7 @@ public class UploadFileService {
 		return dao.selectByPage(file, pageable, null, true);
 	}
 
-	// 编程方式获取spring目录存储bean
-	private FileServer getDirFileServer() {
-		if (dirFileServer == null) {
-			dirFileServer = ApplicationContextManager.getContext().getBean(
-					"dirFileServer", FileServer.class);
-		}
-		return dirFileServer;
-	}
-
-	/**
-	 * 文件处理器处理文件删除
-	 */
-	@Transactional
-	public boolean processDelete(String path, Map<String, Object> arg1)
-			throws Exception {
-		try {
-			Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
-			FileServer server = this.getDirFileServer();
-			if (server.delete(path, true)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-				UploadFile con = dao.selectOne(uf);
-				int r = dao.delete(con);
-				if (r == 0) {
-					throw new RuntimeException(); // 回滚
-				}
-				return true;
-			} else if (existFileWithPath(path)) {
-				UploadFile uf = new UploadFile();
-				uf.setFilePath(path);
-
-			}
-
-		} catch (FileNotFoundException e) {
-			throw new FileNotExsitException(path);
-		}
-		return false;
-	}
+	
 
 	/**
 	 * 查看数据库中是否有此path记录文件
@@ -229,5 +192,58 @@ public class UploadFileService {
 		Dao<UploadFile> dao = DaoFactory.create(UploadFile.class);
 		list=dao.select(con);
 		return list;
+	}
+	
+	/**
+	 *  根据path fileservice 返回文件
+	 * @param path
+	 * @param dirFileServiceName
+	 * @return
+	 */
+	public File getAttachFile(UploadFile uf, String dirFileServiceName) {
+		if (dirFileServiceName == null) {
+			dirFileServer = ApplicationContextManager.getContext().getBean("qybDirFileServer", QybDirFileServer.class);
+
+		} else {
+			dirFileServer = ApplicationContextManager.getContext().getBean(dirFileServiceName,
+					QybDirFileServer.class);
+		}
+		return dirFileServer.getFile(uf.getFilePath());
+/*		InputStream in;
+		try {
+			in = dirFileServer.get(uf.getFilePath());
+			File file = File.createTempFile(uf.getFileName(), "." + uf.getFileType());
+
+			byte[] buffer = new byte[in.available()];
+			// initialStream.read(buffer);
+			//
+			// File targetFile = new File("src/main/resources/targetFile.tmp");
+			OutputStream outStream = new FileOutputStream(file);
+			outStream.write(buffer);
+			return file;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+*/		
+	}	
+	
+	/**
+	 *  根据查询参数  返回文件
+	 * @param path
+	 * @param dirFileServiceName
+	 * @return
+	 */
+	public List<File> getAttachFile(String businessType, String businessKey, String businessKey1, String businessKey2,
+			String businessKey3,String dirFileServiceName) {		
+		List<File> files = new ArrayList<File>();
+		List<UploadFile> list = getFiles(businessType, businessKey, businessKey1, businessKey2, businessKey3);
+		for(UploadFile uf:list){
+			String path = uf.getFilePath();
+			File file = getAttachFile(uf,dirFileServiceName);
+			files.add(file);
+		}
+		return files;
 	}
 }

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form:Form xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dync="http://www.chinacreator.com/platform/mvc/ui/dync" xmlns:form="http://www.chinacreator.com/platform/mvc/form" name="附件INROW" sn="qybdir_uploadfileinrow" type="form">
+  <form:control type="page/normal">
+    <form:attributes source="page/normal">
+      <dync:attribute default="" group="HTML" id="showHead" name="显示标题" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="HTML" id="title" name="标题" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="HTML" id="desc" name="描述" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="fixedHeight" name="自动高度" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="compact" name="紧凑页面" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="false" group="HTML" id="dirtyCheck" name="脏检查" value="false">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="注入配置" id="angularJsServices" name="注入服务" value="">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="beforeDataSourceLoad" name="数据源加载前" value="page_beforeDataSourceLoad($params)">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="afterDataSourceLoad" name="数据源加载后" value="page_afterDataSourceLoad()">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+      <dync:attribute default="" group="事件" id="onload" name="页面加载完成" value="page_onload()">
+        <dync:render/>
+        <dync:children/>
+      </dync:attribute>
+    </form:attributes>
+  </form:control>
+  <form:child xsi:type="form:Group" id="qybdir_uploadfileinrowderective" name="简单容器(DIV)">
+    <form:control type="container/div">
+      <form:attributes source="container/div">
+        <dync:attribute default="false" group="HTML配置" id="nopadding" name="无内边距" value="true">
+          <dync:render colSpan="2" height="0" multi="false" name="checkbox"/>
+          <dync:children/>
+        </dync:attribute>
+        <dync:attribute default="" group="高级自定义" id="html" name="自定义HTML" value="qybdir_uploadfileinrowderective_html">
+          <dync:render colSpan="2" height="0" multi="false" name="html"/>
+          <dync:children/>
+        </dync:attribute>
+      </form:attributes>
+    </form:control>
+  </form:child>
+  <form:datasources>
+    <form:datasource xsi:type="form:Inputs"/>
+    <form:datasource xsi:type="form:LogicDataSource" id="uploadfiles" name="上传的文件" logic="rule:com.chinacreator.c2.qyb.fs.services.getUploadFiles" sn="getuploadfiles">
+      <form:param id="businessType" name="新输入参数" value="$params.businessType"/>
+      <form:param id="businessKey" name="新输入参数" value="$params.businessKey"/>
+      <form:param id="businessKey1" name="新输入参数" value="$params.businessKey1"/>
+      <form:param id="businessKey2" name="新输入参数" value="$params.businessKey2"/>
+      <form:param id="businessKey3" name="新输入参数" value="$params.businessKey3"/>
+    </form:datasource>
+  </form:datasources>
+  <form:scripts>
+
+page_onload:function(){
+	if($params.field){
+		$model.labelWidth = $params.field.labelWidth == undefined?110:$params.field.labelWidth
+		$model.displayName = $params.field.displayName == undefined?$params.field.fieldName:$params.field.displayName
+	}else{
+		$model.labelWidth = $params.labelWidth
+		$model.displayName = $params.displayName
+	}
+	if($scope.permissionData &amp;&amp; $params.field){
+		$model.fillnecessary = $scope.permissionData[$params.field.fieldNo].fillnecessary
+		$model.writePermission = $scope.permissionData[$params.field.fieldNo].writePermission
+	}else{
+		$model.fillnecessary = $params.fillnecessary
+		$model.writePermission = $params.writePermission	
+	}
+
+	$model.fileParams = $params
+
+	$view.fileInputIframeinrow.setParams($params)
+	functions.set_buttonlabel()
+	//ReactNative 环境回调
+	if (!angular.isUndefined(window.C2WebViewBridge)) {
+	    C2WebViewBridge.onMessage = function (message) {
+			Messenger.post({
+			    'message': &quot;RN 回调&quot;+JSON.stringify(message),
+			    'type': 'error',
+			});
+			$model.uploadfiles.$load().then(function(data1){		
+				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:message,files:$model.uploadfiles.result})
+			})	    	
+	    };
+	}	
+},
+
+fileInputIframeinrow_onSuccess:function(data){
+
+	functions.set_buttonlabel()
+	$model.uploadfiles.$load().then(function(data1){
+		if($params.onSuccess){
+			$params.onSuccess(data,$model.uploadfiles.result)
+		}		
+		$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})
+	})
+	
+},
+
+can_del:function(file){
+//	return true
+	return $model.writePermission
+},
+can_download:function(file){
+	return true
+},
+
+handlePath:function(a){
+	var paths = a.split(&quot;/&quot;)
+	if(paths.length == 1){ //并没有分成功试试反斜杠
+		paths = a.split(&quot;\\&quot;)
+	}
+	var name = paths[paths.length - 1]
+	var newname = encodeURIComponent(name)
+	var pathspre = paths.slice(0,paths.length - 1)
+	var pathstrpre = pathspre.join(&quot;/&quot;)
+	var newa = pathstrpre+&quot;/&quot;+newname
+	return newa
+},
+//处理文件下载
+download:function(a){
+	var newa = functions.handlePath(a)
+
+	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa,params:$model.fileParams})
+		.success(function(data,response, status, headers, config){
+			if(1==data.status){
+				 var downloadIframe=document.getElementById(&quot;downloadIframe&quot;);
+				 if(!downloadIframe){
+					 downloadIframe=document.createElement(&quot;iframe&quot;);
+					 downloadIframe.id=&quot;downloadIframe&quot;;
+					 downloadIframe.name=&quot;downloadIframe&quot;;
+					 downloadIframe.style.display=&quot;none&quot;;
+					 document.body.appendChild(downloadIframe);
+				 }
+				 downloadIframe.src=&quot;iframefile/qybdirprocess/download/&quot;+newa+&quot;?myDir=&quot;+$model.fileParams.myDir;
+			}else{
+				alert(&quot;文件不存在&quot;);
+			}
+		});
+},
+//处理文件删除
+deletefile:function(a){debugger
+	var newa = functions.handlePath(a.filePath)
+	$http({method : &quot;DELETE&quot;,url : &quot;iframefile/qybdirprocess/&quot;+newa,params:$model.fileParams})
+	.success(function(data,response, status, headers, config){
+		if(1==data.status){
+			$model.uploadfiles.$reload().then(function(data1){
+				if($params.onDelete){
+					$params.onDelete(data,$model.uploadfiles.result)
+				}	
+				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:data,files:$model.uploadfiles.result})	
+				Messenger.post({
+				    'message': &quot;删除成功&quot;,
+				    'type': 'success',
+				});				
+			})
+		}else{
+			$model.uploadfiles.$reload()
+			Messenger.post({
+			    'message': &quot;删除失败了&quot;,
+			    'type': 'error',
+			});
+		}
+   });
+},
+viewfile:function(file){
+	var url = 'filepath=' + file.filePath;
+	var newurl = encodeURI(url);
+	window.open('showuploadfile.jsp?'+newurl);
+},
+set_buttonlabel:function(){
+	$(&quot;#attchmentinrow span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
+	$(&quot;#attchmentinrow span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);
+	
+	$(&quot;#qybdir_uploadfileinrowderective span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
+	$(&quot;#qybdir_uploadfileinrowderective span .ace-file-container&quot;).attr('data-title',&quot;上传...&quot;);	
+},
+
+fileInputIframeinrow_onError:function(data){
+	if($params.onError){
+		$params.onError(data,$model.uploadfiles.result)
+	}	
+},
+uploadclicked:function($event){
+	//ReactNative 环境
+    if (!angular.isUndefined(window.C2WebViewBridge)) {    
+    	console.log(&quot;RN&quot;)
+		var params = {    			
+				businessType:$params.businessType,
+				businessKey:$params.businessKey,
+				businessKey1:$params.businessKey1,
+				businessKey2:$params.businessKey2,
+				businessKey3:$params.businessKey3,
+				myDir:$params.myDir
+		}    
+    	var msg = {
+    			type: &quot;attachment&quot;,
+    			businessType: &quot;upload&quot;,
+    			params: params
+    	}  	
+    	window.C2WebViewBridge.send(JSON.stringify(msg)); 	
+    } else {
+		var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
+		div.click()    
+    }
+},
+page_beforeDataSourceLoad:function($params){
+	$model.swith = false
+	$model.allow = ($params.allow == undefined||$params.allow == &quot;&quot;)?'[]':$params.allow
+//	$model.allow = ($params.allow == undefined||$params.allow == &quot;&quot;)?'[]':'[&quot;txt&quot;,&quot;pdf&quot;]'
+	
+	$model.deny = '[]'
+	
+	var a = Math.random()*(10000000000000)
+	var ran = Math.floor(a)	
+	$model.instanceid = &quot;fileInputIframeinrow-&quot; 
+		+ new Date().getTime() + &quot;-&quot;
+		+ ran.toString()
+		
+	$model.swith = true
+	
+},
+
+page_afterDataSourceLoad:function(){
+	$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
+}</form:scripts>
+  <form:htmls>&lt;style>
+
+&lt;/style>
+&lt;script type=&quot;text/ng-template&quot; id=&quot;qybdir_uploadfileinrowderective_html&quot;>
+	&lt;div ng-if=&quot;$model.swith&quot; id=&quot;{{$model.instanceid}}&quot; class=&quot;form-group col-sm-12&quot; ng-class=&quot;{'has-error':mainForm.fileInputIframeinrow_text.$invalid}&quot;>
+		&lt;label for=&quot;fileInputIframeinrow&quot; ng-class=&quot;{'required-label':$model.fillnecessary,'control-label':true,'al-control-label':true}&quot; 
+			ng-style=&quot;{width:$model.labelWidth}&quot;>{{$model.displayName}}&lt;/label>
+	   	&lt;div ng-style=&quot;{float:'left'}&quot;>
+			&lt;div ng-show=&quot;false&quot; c2-single-upload-file-iframe=&quot;&quot; id=&quot;fileInputIframeinrow&quot; name=&quot;fileInputIframeinrow&quot; 
+				process=&quot;qybdirprocess&quot; max-size=&quot;10485760&quot; ng-disabled=&quot;false&quot; 
+				on-success=&quot;functions.fileInputIframeinrow_onSuccess(data)&quot; 
+				on-error=&quot;functions.fileInputIframeinrow_onError(data)&quot; 
+				allow=&quot;{{$model.allow}}&quot; deny=&quot;{{$model.deny}}&quot;
+				auto-submit=&quot;&quot; class=&quot;ng-isolate-scope&quot; data-instanceid=&quot;{{$model.instanceid}}&quot;>
+			&lt;/div>	
+			&lt;a ng-show=&quot;$model.writePermission&quot; style=&quot;cursor: pointer;&quot; ng-click=&quot;functions.uploadclicked($event)&quot;>添加附件&lt;/a>
+			&lt;div ng-repeat=&quot;a in $model.uploadfiles.result&quot;>
+				&lt;a style=&quot;color: black&quot; ng-click=&quot;functions.viewfile(a)&quot;>{{a.displayName}}&lt;/a>
+				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_download(file)&quot; ng-click=&quot;functions.download(a.filePath)&quot;>下载&lt;/a>
+				&lt;a class=&quot;att_del&quot; ng-if=&quot;functions.can_del(file)&quot; ng-click=&quot;functions.deletefile(a)&quot;>删除&lt;/a>
+			&lt;/div>	
+			&lt;div ng-if=&quot;!($model.uploadfiles.result.length > 0) &amp;&amp; !$model.writePermission&quot;>
+				无
+			&lt;/div>
+	    &lt;/div>
+	&lt;/div>
+
+&lt;/script></form:htmls>
+</form:Form>
