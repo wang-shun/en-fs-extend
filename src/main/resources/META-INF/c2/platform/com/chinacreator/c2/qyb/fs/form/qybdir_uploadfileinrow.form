@@ -151,7 +151,8 @@ download:function(a){
 			    if (!angular.isUndefined(window.C2WebViewBridge)) {   
 	 
 					var params = {    			
-							downloadpath:downloadpath
+							downloadpath:downloadpath,
+							filename:newa
 					}    
 					
 			    	var msg = {
