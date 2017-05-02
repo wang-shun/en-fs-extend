@@ -210,7 +210,7 @@ viewfile:function(file){
     if (!angular.isUndefined(window.C2WebViewBridge)) {		
     	functions.download(file.filePath)
     }else{
-		var url = 'filepath=' + file.filePath;
+		var url = 'filepath=' + file.filePath + &quot;&amp;myDir=&quot; + $model.fileParams.myDir;
 		var newurl = encodeURI(url);
 		window.open('showuploadfile.jsp?'+newurl);    
     }
