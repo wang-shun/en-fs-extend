@@ -106,6 +106,7 @@ page_onload:function(){
 },
 
 fileInputIframeinrow_onSuccess:function(data){
+	functions.clear_fileInputValue()
 
 	functions.set_buttonlabel()
 	$model.uploadfiles.$load().then(function(data1){
@@ -268,6 +269,11 @@ page_beforeDataSourceLoad:function($params){
 
 page_afterDataSourceLoad:function(){
 	$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
+},
+
+clear_fileInputValue:function(){
+	var input = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
+	input.val(&quot;&quot;)
 }</form:scripts>
   <form:htmls>&lt;style>
 
