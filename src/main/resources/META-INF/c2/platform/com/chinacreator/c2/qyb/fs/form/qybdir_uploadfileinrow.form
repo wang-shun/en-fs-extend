@@ -176,7 +176,10 @@ download:function(a){
 					 downloadIframe.src = downloadpath			    
 			    }			 
 			}else{
-
+				Messenger.post({
+				    'message': &quot;文件不存在&quot;,
+				    'type': 'error',
+				});
 			}
 		});
 },
@@ -206,15 +209,28 @@ deletefile:function(a){
    });
 },
 viewfile:function(file){
+	var newa = functions.handlePath(file.filePath)
 
-	//ReactNative 环境
-    if (!angular.isUndefined(window.C2WebViewBridge)) {		
-    	functions.download(file.filePath)
-    }else{
-		var url = 'filepath=' + file.filePath + &quot;&amp;myDir=&quot; + $model.fileParams.myDir;
-		var newurl = encodeURI(url);
-		window.open('showuploadfile.jsp?'+newurl);    
-    }
+	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa,params:$model.fileParams})
+		.success(function(data,response, status, headers, config){
+	
+			if(1==data.status){
+				//ReactNative 环境
+			    if (!angular.isUndefined(window.C2WebViewBridge)) {		
+			    	functions.download(file.filePath)
+			    }else{
+					var url = 'filepath=' + file.filePath + &quot;&amp;myDir=&quot; + $model.fileParams.myDir;
+					var newurl = encodeURI(url);
+					window.open('showuploadfile.jsp?'+newurl);    
+			    }			
+			}else{
+				Messenger.post({
+				    'message': &quot;文件不存在&quot;,
+				    'type': 'error',
+				});			
+			}
+		});			
+
 },
 set_buttonlabel:function(){
 	$(&quot;#attchmentinrow span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
