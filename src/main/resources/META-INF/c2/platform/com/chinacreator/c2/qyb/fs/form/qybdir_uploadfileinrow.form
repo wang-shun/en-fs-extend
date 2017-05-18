@@ -248,9 +248,11 @@ fileInputIframeinrow_onError:function(data){
 uploadclicked:function($event){
 	//ReactNative 环境
     if (!angular.isUndefined(window.C2WebViewBridge)) {    	
-		var params = {    			
-				instanceId:$model.instanceid,
+		var params = {    	
+// RN 端不能要这两个参数		
+/*				instanceId:$model.instanceid,
 				controlId:&quot;fileInputIframeinrow&quot;
+*/
 		}    
 	
 		angular.extend(params,$model.fileParams);
