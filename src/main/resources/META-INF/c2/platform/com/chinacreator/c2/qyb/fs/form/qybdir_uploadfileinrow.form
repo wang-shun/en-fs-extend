@@ -88,7 +88,7 @@ page_onload:function(){
 
 	$model.fileParams = {}
 	for(var p in $params){
-		if(p != &quot;allow&quot; &amp;&amp; p !=&quot;field&quot; &amp;&amp; p != &quot;onDelete&quot; &amp;&amp; p != &quot;onSuccess&quot;){
+		if(p != &quot;pModels&quot; &amp;&amp; p != &quot;pParams&quot; &amp;&amp; p != &quot;allow&quot; &amp;&amp; p !=&quot;field&quot; &amp;&amp; p != &quot;onDelete&quot; &amp;&amp; p != &quot;onSuccess&quot;){
 			$model.fileParams[p] = $params[p]
 		}
 	}
@@ -144,7 +144,7 @@ download:function(a){
 
 	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa,params:$model.fileParams})
 		.success(function(data,response, status, headers, config){
-	
+
 			if(1==data.status){
 				var downloadpath = &quot;iframefile/qybdirprocess/download/&quot;+newa+&quot;?myDir=&quot;+$model.fileParams.myDir;
 			
