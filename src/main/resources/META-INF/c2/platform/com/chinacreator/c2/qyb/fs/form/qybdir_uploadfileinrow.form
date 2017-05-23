@@ -88,7 +88,9 @@ page_onload:function(){
 
 	$model.fileParams = {}
 	for(var p in $params){
-		if(p != &quot;pModels&quot; &amp;&amp; p != &quot;pParams&quot; &amp;&amp; p != &quot;allow&quot; &amp;&amp; p !=&quot;field&quot; &amp;&amp; p != &quot;onDelete&quot; &amp;&amp; p != &quot;onSuccess&quot;){
+		if(p != &quot;pModels&quot; &amp;&amp; p != &quot;pParams&quot; &amp;&amp; p != &quot;allow&quot; &amp;&amp; p !=&quot;field&quot; 
+			&amp;&amp; p != &quot;onDelete&quot; &amp;&amp; p != &quot;onSuccess&quot; &amp;&amp; p != &quot;fillnecessary&quot;
+			&amp;&amp; p != &quot;writePermission&quot;){
 			$model.fileParams[p] = $params[p]
 		}
 	}
