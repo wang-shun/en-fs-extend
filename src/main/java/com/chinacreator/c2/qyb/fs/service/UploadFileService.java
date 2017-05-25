@@ -57,6 +57,7 @@ public class UploadFileService {
 		file.setFileName(name);
 		file.setBusinessType(businesstype);
 		file.setBusinessKey(businesskey);
+		file.setBusinessKey1(businessKey1);
 		file.setBusinessKey2(businessKey2);
 		file.setBusinessKey3(businessKey3);
 		List<UploadFile> files = dao.select(file);
