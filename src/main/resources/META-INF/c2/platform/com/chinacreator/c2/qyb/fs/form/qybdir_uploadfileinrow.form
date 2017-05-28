@@ -86,17 +86,20 @@ page_onload:function(){
 		$model.writePermission = $params.writePermission	
 	}
 
-	$model.fileParams = $params
+	$model.fileParams = {}
+	for(var p in $params){
+		if(p != &quot;pModels&quot; &amp;&amp; p != &quot;pParams&quot; &amp;&amp; p != &quot;allow&quot; &amp;&amp; p !=&quot;field&quot; 
+			&amp;&amp; p != &quot;onDelete&quot; &amp;&amp; p != &quot;onSuccess&quot; &amp;&amp; p != &quot;fillnecessary&quot;
+			&amp;&amp; p != &quot;writePermission&quot; &amp;&amp; p != &quot;labelWidth&quot; &amp;&amp; p != &quot;span&quot;){
+			$model.fileParams[p] = $params[p]
+		}
+	}
 
 	$view.fileInputIframeinrow.setParams($params)
 	functions.set_buttonlabel()
 	//ReactNative 环境回调
 	if (!angular.isUndefined(window.C2WebViewBridge)) {
 	    C2WebViewBridge.onMessage = function (message) {
-			Messenger.post({
-			    'message': &quot;RN 回调&quot;+JSON.stringify(message),
-			    'type': 'error',
-			});
 			$model.uploadfiles.$load().then(function(data1){		
 				$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,data:message,files:$model.uploadfiles.result})
 			})	    	
@@ -105,6 +108,7 @@ page_onload:function(){
 },
 
 fileInputIframeinrow_onSuccess:function(data){
+	functions.clear_fileInputValue()
 
 	functions.set_buttonlabel()
 	$model.uploadfiles.$load().then(function(data1){
@@ -137,28 +141,52 @@ handlePath:function(a){
 	return newa
 },
 //处理文件下载
-download:function(a){
+download:function(a){ 
 	var newa = functions.handlePath(a)
 
 	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa,params:$model.fileParams})
 		.success(function(data,response, status, headers, config){
+
 			if(1==data.status){
-				 var downloadIframe=document.getElementById(&quot;downloadIframe&quot;);
-				 if(!downloadIframe){
-					 downloadIframe=document.createElement(&quot;iframe&quot;);
-					 downloadIframe.id=&quot;downloadIframe&quot;;
-					 downloadIframe.name=&quot;downloadIframe&quot;;
-					 downloadIframe.style.display=&quot;none&quot;;
-					 document.body.appendChild(downloadIframe);
-				 }
-				 downloadIframe.src=&quot;iframefile/qybdirprocess/download/&quot;+newa+&quot;?myDir=&quot;+$model.fileParams.myDir;
+				var downloadpath = &quot;iframefile/qybdirprocess/download/&quot;+newa+&quot;?myDir=&quot;+$model.fileParams.myDir;
+			
+				//ReactNative 环境
+			    if (!angular.isUndefined(window.C2WebViewBridge)) {   
+	 
+					var params = {    			
+							downloadpath:downloadpath,
+							filename:newa
+					}    
+					
+			    	var msg = {
+			    			type: &quot;attachment&quot;,
+			    			businessType: &quot;download&quot;,
+			    			params: params
+			    	}  	
+
+			    	window.C2WebViewBridge.send(JSON.stringify(msg)); 
+					return;
+			    }else{		    
+					 var downloadIframe=document.getElementById(&quot;downloadIframe&quot;);
+					 if(!downloadIframe){
+						 downloadIframe=document.createElement(&quot;iframe&quot;);
+						 downloadIframe.id=&quot;downloadIframe&quot;;
+						 downloadIframe.name=&quot;downloadIframe&quot;;
+						 downloadIframe.style.display=&quot;none&quot;;
+						 document.body.appendChild(downloadIframe);
+					 }
+					 downloadIframe.src = downloadpath			    
+			    }			 
 			}else{
-				alert(&quot;文件不存在&quot;);
+				Messenger.post({
+				    'message': &quot;文件不存在&quot;,
+				    'type': 'error',
+				});
 			}
 		});
 },
 //处理文件删除
-deletefile:function(a){debugger
+deletefile:function(a){
 	var newa = functions.handlePath(a.filePath)
 	$http({method : &quot;DELETE&quot;,url : &quot;iframefile/qybdirprocess/&quot;+newa,params:$model.fileParams})
 	.success(function(data,response, status, headers, config){
@@ -183,9 +211,28 @@ deletefile:function(a){debugger
    });
 },
 viewfile:function(file){
-	var url = 'filepath=' + file.filePath;
-	var newurl = encodeURI(url);
-	window.open('showuploadfile.jsp?'+newurl);
+	var newa = functions.handlePath(file.filePath)
+
+	$http({method : &quot;GET&quot;,url : &quot;iframefile/qybdirprocess/exist/&quot;+newa,params:$model.fileParams})
+		.success(function(data,response, status, headers, config){
+	
+			if(1==data.status){
+				//ReactNative 环境
+			    if (!angular.isUndefined(window.C2WebViewBridge)) {		
+			    	functions.download(file.filePath)
+			    }else{
+					var url = 'filepath=' + file.filePath + &quot;&amp;myDir=&quot; + $model.fileParams.myDir;
+					var newurl = encodeURI(url);
+					window.open('showuploadfile.jsp?'+newurl);    
+			    }			
+			}else{
+				Messenger.post({
+				    'message': &quot;文件不存在&quot;,
+				    'type': 'error',
+				});			
+			}
+		});			
+
 },
 set_buttonlabel:function(){
 	$(&quot;#attchmentinrow span .ace-file-name&quot;).attr('data-title',&quot;添加附件...&quot;);
@@ -202,22 +249,22 @@ fileInputIframeinrow_onError:function(data){
 },
 uploadclicked:function($event){
 	//ReactNative 环境
-    if (!angular.isUndefined(window.C2WebViewBridge)) {    
-    	console.log(&quot;RN&quot;)
-		var params = {    			
-				businessType:$params.businessType,
-				businessKey:$params.businessKey,
-				businessKey1:$params.businessKey1,
-				businessKey2:$params.businessKey2,
-				businessKey3:$params.businessKey3,
-				myDir:$params.myDir
+    if (!angular.isUndefined(window.C2WebViewBridge)) {    	
+		var params = {    	
+// RN 端不能要这两个参数		
+/*				instanceId:$model.instanceid,
+				controlId:&quot;fileInputIframeinrow&quot;
+*/
 		}    
+	
+		angular.extend(params,$model.fileParams);
+
     	var msg = {
     			type: &quot;attachment&quot;,
     			businessType: &quot;upload&quot;,
     			params: params
     	}  	
-    	window.C2WebViewBridge.send(JSON.stringify(msg)); 	
+    	window.C2WebViewBridge.send(JSON.stringify(msg)); 		
     } else {
 		var div = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
 		div.click()    
@@ -242,6 +289,11 @@ page_beforeDataSourceLoad:function($params){
 
 page_afterDataSourceLoad:function(){
 	$scope.$emit(&quot;fstatus&quot;,{params:$params,num:$model.uploadfiles.result.length,files:$model.uploadfiles.result})
+},
+
+clear_fileInputValue:function(){
+	var input = $(&quot;#&quot;+$model.instanceid + &quot; form&quot; + &quot; input[type='file']&quot;)
+	input.val(&quot;&quot;)
 }</form:scripts>
   <form:htmls>&lt;style>
 

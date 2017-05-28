@@ -259,5 +259,13 @@ public class QybDirFileServer implements HTTPFileServer{
 		}
 		return true;
 	}
+
+	public File getRoot() {
+		return root;
+	}
+
+//	public void setRoot(File root) {
+//		this.root = root;
+//	}
 	
 }
